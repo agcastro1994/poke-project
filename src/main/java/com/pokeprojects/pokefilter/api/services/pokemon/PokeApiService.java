@@ -5,6 +5,7 @@ import com.pokeprojects.pokefilter.api.dto.pokemon.PokemonClientDTO;
 import com.pokeprojects.pokefilter.api.enums.Region;
 import com.pokeprojects.pokefilter.api.model.pokemon.Pokemon;
 import com.pokeprojects.pokefilter.api.model.type.Type;
+import com.pokeprojects.pokefilter.api.services.FilterService;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
@@ -15,9 +16,9 @@ import java.util.stream.Collectors;
 public class PokeApiService {
     private PokeReactiveClient reactiveClient;
     private ModelMapper mapper;
-    private PokemonFilterService filterService;
+    private FilterService filterService;
 
-    public PokeApiService(PokeReactiveClient reactiveClient, ModelMapper mapper, PokemonFilterService filterService) {
+    public PokeApiService(PokeReactiveClient reactiveClient, ModelMapper mapper, FilterService filterService) {
         this.reactiveClient = reactiveClient;
         this.mapper = mapper;
         this.filterService = filterService;
