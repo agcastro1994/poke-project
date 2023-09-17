@@ -21,7 +21,7 @@ public class Pokemon {
     private Integer order;
     private Integer weight;
     private List<PokemonAbility> abilities;
-//    private List<PokemonMove> moves;
+    private List<PokemonMove> moves;
     private PokemonSprites sprites;
     private List<PokemonStat> stats;
     private List<PokemonType> types;
