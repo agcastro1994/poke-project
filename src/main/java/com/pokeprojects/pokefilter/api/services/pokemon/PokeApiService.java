@@ -2,7 +2,6 @@ package com.pokeprojects.pokefilter.api.services.pokemon;
 
 import com.pokeprojects.pokefilter.api.client.pokeapi.PokeReactiveClient;
 import com.pokeprojects.pokefilter.api.dto.pokemon.PokemonClientDTO;
-import com.pokeprojects.pokefilter.api.dto.pokemon.PokemonSmallDTO;
 import com.pokeprojects.pokefilter.api.enums.Region;
 import com.pokeprojects.pokefilter.api.model.pokemon.Pokemon;
 import com.pokeprojects.pokefilter.api.model.type.Type;

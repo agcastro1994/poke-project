@@ -9,9 +9,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-import java.util.List;
 
-//TODO extract Flux operation to service level
 @Component
 public class PokeReactiveClient extends GenericReactiveClient {
     private String baseUrl = "pokemon";
@@ -38,7 +36,4 @@ public class PokeReactiveClient extends GenericReactiveClient {
                 .flatMap(type -> followResource(type::getType, TypeDTO.class));
     }
 
-    private Mono<PokemonClientDTO> searchForInternalResource(TypePokemonDTO typePoke){
-        return followResource(typePoke::getPokemon, PokemonClientDTO.class);
-    }
 }

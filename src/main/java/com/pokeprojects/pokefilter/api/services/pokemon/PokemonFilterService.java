@@ -9,7 +9,6 @@ import java.util.List;
 
 @Service
 public class PokemonFilterService {
-
     public List<Pokemon> filterPokemonByRegion(Flux<Pokemon> pokemonList, Region region){
          return pokemonList.filter(poke -> poke != null && poke.getId() > region.getOffset() && poke.getId() <= region.getLimit()).collectList().block();
     }

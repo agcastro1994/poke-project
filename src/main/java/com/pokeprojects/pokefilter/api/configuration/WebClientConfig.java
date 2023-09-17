@@ -7,11 +7,8 @@ import org.springframework.http.MediaType;
 import org.springframework.web.reactive.function.client.ExchangeStrategies;
 import org.springframework.web.reactive.function.client.WebClient;
 
-
-
 @Configuration
 public class WebClientConfig {
-
     @Bean
     public WebClient webClient() {
         final int size = 16 * 1024 * 1024;

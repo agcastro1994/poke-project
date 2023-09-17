@@ -15,13 +15,10 @@ public enum Region {
     PALDEA(905, 1010),
     ALL(0, 1010);
 
-
     private final Integer offset;
     private final Integer limit;
 
-
     Region(Integer offset, Integer limit) {
-
         this.offset = offset;
         this.limit = limit;
     }
