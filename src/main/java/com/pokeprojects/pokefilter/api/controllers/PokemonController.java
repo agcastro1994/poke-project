@@ -38,7 +38,7 @@ public class PokemonController {
     }
 
     @GetMapping("/filter")
-    public ResponseEntity<List<PokemonSmallDTO>> getPokemonByType(@RequestParam String typeId, @RequestParam Region region) {
+    public ResponseEntity<List<PokemonSmallDTO>> getPokemonByType(@RequestParam String typeId, @RequestParam String region) {
         List<Pokemon> pokemonList = pokeApiService.getPokemonByTypeAndRegion(typeId, region);
         return ResponseEntity.ok(pokemonList.stream().map(poke -> modelMapper.map(poke, PokemonSmallDTO.class)).toList());
     }
