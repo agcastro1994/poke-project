@@ -3,6 +3,8 @@ package com.pokeprojects.pokefilter.api.dto.type;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import com.pokeprojects.pokefilter.api.model.type.Type;
+import com.pokeprojects.pokefilter.api.resources.NamedApiResource;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,10 +19,11 @@ import java.util.List;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 public class TypeRelationsExternalDTO {
-    private List<TypeDTO> noDamageTo;
-    private List<TypeDTO> halfDamageTo;
-    private List<TypeDTO> doubleDamageTo;
-    private List<TypeDTO> noDamageFrom;
-    private List<TypeDTO> halfDamageFrom;
-    private List<TypeDTO> doubleDamageFrom;
+    private List<NamedApiResource<TypeExternalDTO>> noDamageTo;
+    private List<NamedApiResource<TypeExternalDTO>> halfDamageTo;
+    private List<NamedApiResource<TypeExternalDTO>> doubleDamageTo;
+    private List<NamedApiResource<TypeExternalDTO>> noDamageFrom;
+    private List<NamedApiResource<TypeExternalDTO>> halfDamageFrom;
+    private List<NamedApiResource<TypeExternalDTO>> doubleDamageFrom;
 }
+

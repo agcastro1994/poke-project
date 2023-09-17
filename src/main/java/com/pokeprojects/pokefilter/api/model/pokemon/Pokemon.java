@@ -21,14 +21,8 @@ public class Pokemon {
     private Integer order;
     private Integer weight;
     private List<PokemonAbility> abilities;
-//    private List<NamedApiResource<PokemonForm>> forms;
-//    private List<VersionGameIndex> gameIndices;
-//    private List<PokemonHeldItem> heldItems;
-//    private String locationAreaEncounters;
 //    private List<PokemonMove> moves;
     private PokemonSprites sprites;
-//    private NamedApiResource<PokemonSpecies> species;
     private List<PokemonStat> stats;
     private List<PokemonType> types;
-//    private List<PokemonTypePast> pastTypes;
 }

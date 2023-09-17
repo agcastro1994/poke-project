@@ -1,9 +1,11 @@
-package com.pokeprojects.pokefilter.api.dto.ability;
+package com.pokeprojects.pokefilter.api.dto.type;
+
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
-import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import com.pokeprojects.pokefilter.api.dto.pokemon.PokemonClientDTO;
+import com.pokeprojects.pokefilter.api.resources.NamedApiResource;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,8 +17,9 @@ import lombok.Setter;
 @NoArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-public class PokemonAbilityDTO {
-    private Boolean isHidden;
+public class TypePokemonDTO {
+
     private Integer slot;
-    private AbilityDTO ability;
+    private NamedApiResource<PokemonClientDTO> pokemon;
+
 }

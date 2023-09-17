@@ -5,19 +5,27 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpServerErrorException;
+import org.springframework.web.reactive.function.client.WebClientException;
+import org.springframework.web.reactive.function.client.WebClientResponseException;
 
-@ControllerAdvice
+@RestControllerAdvice
 public class ExceptionController {
 
-    @ExceptionHandler(HttpServerErrorException.class)
-    public ResponseEntity<StandardErrorDTO> handleServerError(HttpServerErrorException e){
+    @ExceptionHandler(WebClientResponseException.class)
+    public ResponseEntity<StandardErrorDTO> handleClientError(WebClientResponseException e){
+        return new ResponseEntity<>(new StandardErrorDTO(HttpStatus.NOT_FOUND.name(), "We could not found the resource"), HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(WebClientException.class)
+    public ResponseEntity<StandardErrorDTO> handleServerError(WebClientException e){
         return new ResponseEntity<>(new StandardErrorDTO(HttpStatus.INTERNAL_SERVER_ERROR.name(), "There was an error with your request"), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    @ExceptionHandler(HttpClientErrorException.class)
-    public ResponseEntity<StandardErrorDTO> handleClientError(HttpClientErrorException e){
-        return new ResponseEntity<>(new StandardErrorDTO(HttpStatus.NOT_FOUND.name(), "We could not found the resource"), HttpStatus.NOT_FOUND);
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<StandardErrorDTO> handleServerError(Exception e){
+        return new ResponseEntity<>(new StandardErrorDTO(HttpStatus.INTERNAL_SERVER_ERROR.name(), "There was an error in our server, please try again"), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

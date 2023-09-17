@@ -1,5 +1,6 @@
 package com.pokeprojects.pokefilter.api.model.type;
 
+import com.pokeprojects.pokefilter.api.resources.NamedApiResource;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,10 +13,10 @@ import java.util.List;
 @Getter
 @Setter
 public class TypeRelations {
-    private List<Type> noDamageTo;
-    private List<Type> halfDamageTo;
-    private List<Type> doubleDamageTo;
-    private List<Type> noDamageFrom;
-    private List<Type> halfDamageFrom;
-    private List<Type> doubleDamageFrom;
+    private List<NamedApiResource<Type>> noDamageTo;
+    private List<NamedApiResource<Type>> halfDamageTo;
+    private List<NamedApiResource<Type>> doubleDamageTo;
+    private List<NamedApiResource<Type>> noDamageFrom;
+    private List<NamedApiResource<Type>> halfDamageFrom;
+    private List<NamedApiResource<Type>> doubleDamageFrom;
 }

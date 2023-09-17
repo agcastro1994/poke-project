@@ -2,8 +2,8 @@ package com.pokeprojects.pokefilter.api.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
-import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import com.pokeprojects.pokefilter.api.resources.StandardApiResource;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,14 +15,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-public class StatDTO {
+public class StatDTO implements StandardApiResource {
     private Integer id;
     private String name;
-    private Integer gameIndex;
-    private Boolean isBattleOnly;
-    //private MoveStatAffectSets affectingMoves;
-    //private NatureStatAffectSets affectingNatures;
-    //private List<ApiResource<Characteristic>> characteristics;
-    //private NamedApiResource<MoveDamageClass> moveDamageClass;
-    //private List<Name> names;
 }
