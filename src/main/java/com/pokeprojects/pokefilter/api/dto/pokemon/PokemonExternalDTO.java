@@ -28,7 +28,7 @@ public class PokemonExternalDTO {
     private Integer order;
     private Integer weight;
     private List<PokemonAbilityExternalDTO> abilities;
-//    private List<PokemonMove> moves;
+    private List<PokemonMoveDTO> moves;
     private PokemonSpritesDTO sprites;
     private List<PokemonStatExternalDTO> stats;
     private List<PokemonTypeExternalDTO> types;

@@ -24,14 +24,12 @@ public class PokemonClientDTO implements StandardApiResource {
     private Integer baseExperience;
     private Integer height;
     private Boolean isDefault;
-
     private Integer order;
     private Integer weight;
     private List<PokemonAbilityDTO> abilities;
-//    private List<PokemonMove> moves;
+    private List<PokemonMoveDTO> moves;
     private PokemonSpritesDTO sprites;
     private List<PokemonStatDTO> stats;
     private List<PokemonTypeDTO> types;
-
 }
 
