@@ -25,6 +25,16 @@ public class PokemonController {
         this.modelMapper = modelMapper;
     }
 
+    @GetMapping("/all")
+    public ResponseEntity<List<PokemonSmallDTO>> getAllPokemon(){
+        return ResponseEntity.ok(pokeApiService.getAllPokemon().stream().map(poke->modelMapper.map(poke, PokemonSmallDTO.class)).toList());
+    }
+
+    @GetMapping
+    public ResponseEntity<List<PokemonSmallDTO>> getAllPokemonByRegion(@RequestParam Region region) {
+        return ResponseEntity.ok(pokeApiService.getAllPokemonByRegion(region).stream().map(poke->modelMapper.map(poke, PokemonSmallDTO.class)).toList());
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<PokemonExternalDTO> getPokemon(@PathVariable String id) {
         Pokemon response = pokeApiService.getPokemonByIdOrName(id);

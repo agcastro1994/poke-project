@@ -16,7 +16,7 @@ public enum PokemonFilters{
         @Override
         public Predicate<Pokemon> getFilterCondition(String region){
             Region selectedRegion = Region.valueOf(region);
-            return pokemon -> selectedRegion.getOffset() < pokemon.getId() && pokemon.getId() <= selectedRegion.getLimit();
+            return pokemon -> selectedRegion.getOffset() < pokemon.getId() && pokemon.getId() <= selectedRegion.getLimit()+ selectedRegion.getOffset();
         }
     };
 
