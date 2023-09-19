@@ -13,7 +13,7 @@ import java.util.List;
 @Getter
 @Setter
 public class Pokemon {
-    private Long id;
+    private Integer id;
     private String name;
     private Integer baseExperience;
     private Integer height;

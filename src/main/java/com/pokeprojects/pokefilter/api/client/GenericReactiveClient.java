@@ -1,7 +1,9 @@
 package com.pokeprojects.pokefilter.api.client;
 
+import com.pokeprojects.pokefilter.api.dto.PageResponseDTO;
 import com.pokeprojects.pokefilter.api.resources.NamedApiResource;
 import com.pokeprojects.pokefilter.api.resources.StandardApiResource;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -38,19 +40,31 @@ public abstract class GenericReactiveClient {
                 .flatMapMany(resources -> getNamedResources(resources, cls));
     }
 
-    private <T extends StandardApiResource> Mono<T> getNamedResource(NamedApiResource<T> resource, Class<T> resourceClass) {
+    public <T extends StandardApiResource> Mono<T> getNamedResource(NamedApiResource<T> resource, Class<T> resourceClass) {
         return webClient.get()
                 .uri(URI.create(resource.getUrl()))
                 .retrieve()
                 .bodyToMono(resourceClass);
     }
 
-    private <T extends StandardApiResource> Flux<T> getNamedResources(List<NamedApiResource<T>> resources, Class<T> resourceClass) {
+    public <T extends StandardApiResource> Flux<T> getNamedResources(List<NamedApiResource<T>> resources, Class<T> resourceClass) {
         List<Mono<T>> resourceMonos = resources.stream()
                 .map(resource -> getNamedResource(resource, resourceClass))
                 .collect(Collectors.toList());
 
         return Flux.merge(resourceMonos);
     }
+
+    public <T extends StandardApiResource> Mono<PageResponseDTO<T>> getPaginatedResource(String url, Integer limit, Integer offset, Class<T> resourceClass) {
+        return webClient.get()
+                .uri(uriBuilder -> uriBuilder
+                        .path(url)
+                        .queryParam("limit",limit)
+                        .queryParam("offset", offset)
+                        .build())
+                .retrieve()
+                .bodyToMono(new ParameterizedTypeReference<>(){});
+    }
+
 
 }

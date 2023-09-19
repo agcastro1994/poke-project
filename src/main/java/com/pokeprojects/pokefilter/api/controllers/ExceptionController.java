@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.reactive.function.client.WebClientException;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
 
+import java.util.NoSuchElementException;
+
 @RestControllerAdvice
 public class ExceptionController {
 
@@ -19,6 +21,11 @@ public class ExceptionController {
     @ExceptionHandler(WebClientException.class)
     public ResponseEntity<StandardErrorDTO> handleServerError(WebClientException e){
         return new ResponseEntity<>(new StandardErrorDTO(HttpStatus.INTERNAL_SERVER_ERROR.name(), "There was an error with your request"), HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @ExceptionHandler(NoSuchElementException.class)
+    public ResponseEntity<StandardErrorDTO> handleServerError(NoSuchElementException e){
+        return new ResponseEntity<>(new StandardErrorDTO(HttpStatus.INTERNAL_SERVER_ERROR.name(), "There is a problem with one of your filter parameters"), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @ExceptionHandler(Exception.class)
