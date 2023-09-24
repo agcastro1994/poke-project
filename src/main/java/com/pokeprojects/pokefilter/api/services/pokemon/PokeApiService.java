@@ -10,6 +10,8 @@ import com.pokeprojects.pokefilter.api.model.type.Type;
 import com.pokeprojects.pokefilter.api.repository.pokemon.PokemonInMemoryRepository;
 import com.pokeprojects.pokefilter.api.services.FilterService;
 import org.modelmapper.ModelMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -20,6 +22,7 @@ public class PokeApiService {
     private ModelMapper mapper;
     private FilterService filterService;
     private PokemonInMemoryRepository inMemoryRepository;
+    private Logger logger = LoggerFactory.getLogger(PokeApiService.class);
 
     public PokeApiService(PokeReactiveClient reactiveClient, ModelMapper mapper, FilterService filterService, PokemonInMemoryRepository inMemoryRepository) {
         this.reactiveClient = reactiveClient;
@@ -30,6 +33,7 @@ public class PokeApiService {
 
     public Pokemon getPokemonByIdOrName(String identifier){
         PokemonClientDTO pokemonDTO = reactiveClient.getPokemon(identifier).block();
+        logger.info("Mapping to model the pokemon with id {}", pokemonDTO.getId());
         return this.mapper.map(pokemonDTO, Pokemon.class);
     }
 

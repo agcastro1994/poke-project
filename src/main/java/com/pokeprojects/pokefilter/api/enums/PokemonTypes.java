@@ -35,7 +35,7 @@ public enum PokemonTypes {
     }
 
     public static PokemonTypes typeMatch(String identifier){
-        return Arrays.stream(PokemonTypes.values()).filter(type -> type.getId().equals(Integer.valueOf(identifier)) || type.getName().equals(identifier)).findFirst().orElseThrow();
+        return Arrays.stream(PokemonTypes.values()).filter(type -> type.getId().toString().equals(identifier) || type.getName().equals(identifier)).findFirst().orElseThrow();
     }
 
     public static boolean isAMatch(Type pokeType, PokemonTypes searchType){
