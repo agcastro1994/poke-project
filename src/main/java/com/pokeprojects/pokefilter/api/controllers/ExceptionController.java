@@ -25,7 +25,7 @@ public class ExceptionController {
 
     @ExceptionHandler(NoSuchElementException.class)
     public ResponseEntity<StandardErrorDTO> handleServerError(NoSuchElementException e){
-        return new ResponseEntity<>(new StandardErrorDTO(HttpStatus.INTERNAL_SERVER_ERROR.name(), "There is a problem with one of your filter parameters"), HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<>(new StandardErrorDTO(HttpStatus.INTERNAL_SERVER_ERROR.name(), e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @ExceptionHandler(Exception.class)

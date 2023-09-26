@@ -2,6 +2,7 @@ package com.pokeprojects.pokefilter.api.client.pokeapi;
 
 import com.pokeprojects.pokefilter.api.client.GenericReactiveClient;
 import com.pokeprojects.pokefilter.api.dto.PageResponseDTO;
+import com.pokeprojects.pokefilter.api.dto.move.MoveDTO;
 import com.pokeprojects.pokefilter.api.dto.pokemon.PokemonClientDTO;
 import com.pokeprojects.pokefilter.api.dto.type.TypeDTO;
 import com.pokeprojects.pokefilter.api.enums.Region;
@@ -34,6 +35,12 @@ public class PokeReactiveClient extends GenericReactiveClient {
                 .doOnError(WebClientException -> logger.warn("Fetch failed for pokemon with identification: {}", identifier, WebClientException));
         return mono;
     }
+    public Mono<MoveDTO> getMove(String identifier){
+        Mono<MoveDTO> mono = this.getResource(MoveDTO.class, identifier, "move")
+                .doOnError(WebClientException -> logger.warn("Fetch failed for pokemon with identification: {}", identifier, WebClientException));
+        return mono;
+    }
+
 
     public Flux<PokemonClientDTO> getPokemonListByType(String type){
         logger.info("Trying to fetch pokemon with type: {}", type);
