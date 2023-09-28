@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="c3b44d9c-adf0-4dec-bcfc-780aa52984c1" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/../../pom.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../src/main/java/com/pokeprojects/pokefilter/PokefilterApplication.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../src/main/java/com/pokeprojects/pokefilter/api/client/GenericReactiveClient.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../src/main/java/com/pokeprojects/pokefilter/api/client/pokeapi/PokeReactiveClient.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../src/main/java/com/pokeprojects/pokefilter/api/configuration/ModelMapperConfig.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../src/main/java/com/pokeprojects/pokefilter/api/configuration/ObjectMapperConfig.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../src/main/java/com/pokeprojects/pokefilter/api/configuration/RestTemplateConfig.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../src/main/java/com/pokeprojects/pokefilter/api/configuration/WebClientConfig.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../src/main/java/com/pokeprojects/pokefilter/api/controllers/ExceptionController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../src/main/java/com/pokeprojects/pokefilter/api/controllers/PokemonController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../src/main/java/com/pokeprojects/pokefilter/api/dto/PageResponseDTO.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../src/main/java/com/pokeprojects/pokefilter/api/dto/StandardErrorDTO.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../src/main/java/com/pokeprojects/pokefilter/api/dto/StatDTO.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../src/main/java/com/pokeprojects/pokefilter/api/dto/StatExternalDTO.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../src/main/java/com/pokeprojects/pokefilter/api/dto/ability/AbilityDTO.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../src/main/java/com/pokeprojects/pokefilter/api/dto/ability/AbilityExternalDTO.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../src/main/java/com/pokeprojects/pokefilter/api/dto/move/MoveDTO.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../src/main/java/com/pokeprojects/pokefilter/api/dto/move/MoveDamageClassDTO.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../src/main/java/com/pokeprojects/pokefilter/api/dto/pokemon/PokemonAbilityDTO.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../src/main/java/com/pokeprojects/pokefilter/api/dto/pokemon/PokemonAbilityExternalDTO.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../src/main/java/com/pokeprojects/pokefilter/api/dto/pokemon/PokemonClientDTO.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../src/main/java/com/pokeprojects/pokefilter/api/dto/pokemon/PokemonExternalDTO.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../src/main/java/com/pokeprojects/pokefilter/api/dto/pokemon/PokemonMoveDTO.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../src/main/java/com/pokeprojects/pokefilter/api/dto/pokemon/PokemonSmallDTO.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../src/main/java/com/pokeprojects/pokefilter/api/dto/pokemon/PokemonStatDTO.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../src/main/java/com/pokeprojects/pokefilter/api/dto/pokemon/PokemonStatExternalDTO.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../src/main/java/com/pokeprojects/pokefilter/api/dto/pokemon/PokemonTypeDTO.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../src/main/java/com/pokeprojects/pokefilter/api/dto/pokemon/PokemonTypeExternalDTO.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../src/main/java/com/pokeprojects/pokefilter/api/dto/pokemon/ResourceListDTO.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../src/main/java/com/pokeprojects/pokefilter/api/dto/sprites/AdditionalArtworkDTO.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../src/main/java/com/pokeprojects/pokefilter/api/dto/sprites/OtherSpritesDTO.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../src/main/java/com/pokeprojects/pokefilter/api/dto/sprites/PokemonSpritesDTO.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../src/main/java/com/pokeprojects/pokefilter/api/dto/type/TypeDTO.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../src/main/java/com/pokeprojects/pokefilter/api/dto/type/TypeExternalDTO.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../src/main/java/com/pokeprojects/pokefilter/api/dto/type/TypePokemonDTO.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../src/main/java/com/pokeprojects/pokefilter/api/dto/type/TypeRelationsDTO.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../src/main/java/com/pokeprojects/pokefilter/api/dto/type/TypeRelationsExternalDTO.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../src/main/java/com/pokeprojects/pokefilter/api/enums/MatchStrategy.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../src/main/java/com/pokeprojects/pokefilter/api/enums/PokemonFilters.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../src/main/java/com/pokeprojects/pokefilter/api/enums/PokemonTypes.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../src/main/java/com/pokeprojects/pokefilter/api/enums/Region.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../src/main/java/com/pokeprojects/pokefilter/api/exceptions/ApiClientErrorException.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../src/main/java/com/pokeprojects/pokefilter/api/exceptions/ApiServerErrorException.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../src/main/java/com/pokeprojects/pokefilter/api/listeners/StartupListener.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../src/main/java/com/pokeprojects/pokefilter/api/model/ability/Ability.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../src/main/java/com/pokeprojects/pokefilter/api/model/move/Move.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../src/main/java/com/pokeprojects/pokefilter/api/model/move/MoveDamageClass.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../src/main/java/com/pokeprojects/pokefilter/api/model/pokemon/Pokemon.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../src/main/java/com/pokeprojects/pokefilter/api/model/pokemon/PokemonAbility.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../src/main/java/com/pokeprojects/pokefilter/api/model/pokemon/PokemonMove.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../src/main/java/com/pokeprojects/pokefilter/api/model/pokemon/PokemonSmall.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../src/main/java/com/pokeprojects/pokefilter/api/model/pokemon/PokemonStat.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../src/main/java/com/pokeprojects/pokefilter/api/model/pokemon/PokemonType.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../src/main/java/com/pokeprojects/pokefilter/api/model/sprites/AdditionalArtwork.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../src/main/java/com/pokeprojects/pokefilter/api/model/sprites/OtherSprites.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../src/main/java/com/pokeprojects/pokefilter/api/model/sprites/PokemonSprites.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../src/main/java/com/pokeprojects/pokefilter/api/model/stat/Stat.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../src/main/java/com/pokeprojects/pokefilter/api/model/type/Type.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../src/main/java/com/pokeprojects/pokefilter/api/model/type/TypePokemon.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../src/main/java/com/pokeprojects/pokefilter/api/model/type/TypeRelations.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../src/main/java/com/pokeprojects/pokefilter/api/repository/pokemon/PokemonInMemoryRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../src/main/java/com/pokeprojects/pokefilter/api/resources/ApiResource.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../src/main/java/com/pokeprojects/pokefilter/api/resources/NamedApiResource.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../src/main/java/com/pokeprojects/pokefilter/api/resources/StandardApiResource.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../src/main/java/com/pokeprojects/pokefilter/api/services/FilterService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../src/main/java/com/pokeprojects/pokefilter/api/services/pokemon/PokeApiService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../src/main/java/com/pokeprojects/pokefilter/api/utils/PokemonDamageCalculator.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../src/main/resources/application-test.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../src/main/resources/application.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../src/main/resources/logback.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../src/test/java/com/pokeprojects/pokefilter/PokefilterApplicationTests.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../src/test/java/com/pokeprojects/pokefilter/filters/FilterServiceTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../src/test/java/com/pokeprojects/pokefilter/integration/PokemonIntegration.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../src/test/java/com/pokeprojects/pokefilter/pokemon/PokemonApiServiceTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../src/test/java/resources/charizard.json" beforeDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../.." />
+  </component>
+  <component name="ProjectId" id="2W2liShABHZwHZDbLc7fLiur8oE" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="c3b44d9c-adf0-4dec-bcfc-780aa52984c1" name="Changes" comment="" />
+      <created>1695938683608</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1695938683608</updated>
+      <workItem from="1695938684829" duration="56000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+</project>
