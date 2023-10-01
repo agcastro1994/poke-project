@@ -24,12 +24,12 @@ public class ExceptionController {
     }
 
     @ExceptionHandler(NoSuchElementException.class)
-    public ResponseEntity<StandardErrorDTO> handleServerError(NoSuchElementException e){
-        return new ResponseEntity<>(new StandardErrorDTO(HttpStatus.INTERNAL_SERVER_ERROR.name(), e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+    public ResponseEntity<StandardErrorDTO> handleElementNotFoundError(NoSuchElementException e){
+        return new ResponseEntity<>(new StandardErrorDTO(HttpStatus.NOT_FOUND.name(), e.getMessage()), HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<StandardErrorDTO> handleServerError(Exception e){
+    public ResponseEntity<StandardErrorDTO> handleGeneralError(Exception e){
         return new ResponseEntity<>(new StandardErrorDTO(HttpStatus.INTERNAL_SERVER_ERROR.name(), "There was an error in our server, please try again"), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }
