@@ -1,6 +1,5 @@
 package com.pokeprojects.pokefilter.api.controllers;
 
-
 import com.pokeprojects.pokefilter.api.dto.pokemon.PokemonExternalDTO;
 import com.pokeprojects.pokefilter.api.dto.pokemon.PokemonSmallDTO;
 import com.pokeprojects.pokefilter.api.dto.type.TypeExternalDTO;
@@ -47,15 +46,15 @@ public class PokemonController {
     @GetMapping("/{id}")
     public ResponseEntity<PokemonExternalDTO> getPokemon(@PathVariable String id) {
         logger.info("Received request for retrieving pokemon with identifier {}", id);
-        Pokemon response = pokeApiService.getPokemonInMemory(id);
+        Pokemon response = pokeApiService.getPokemon(id);
         logger.info("Retrieving pokemon with identifier {}", id);
         return ResponseEntity.ok(modelMapper.map(response, PokemonExternalDTO.class));
     }
 
     @GetMapping("/damage")
     public ResponseEntity<Double> getPokemon(@RequestParam String attackerId, @RequestParam String defenderId, @RequestParam String moveId) {
-        Pokemon attacker = pokeApiService.getPokemonInMemory(attackerId);
-        Pokemon defender = pokeApiService.getPokemonInMemory(defenderId);
+        Pokemon attacker = pokeApiService.getPokemon(attackerId);
+        Pokemon defender = pokeApiService.getPokemon(defenderId);
         Move move = pokeApiService.getMoveByIdOrName(moveId);
         return ResponseEntity.ok(damageCalculator.damageCalculator(attacker,defender,move));
     }

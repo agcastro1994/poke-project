@@ -37,13 +37,10 @@ public class PokeApiService {
         this.inMemoryRepository = inMemoryRepository;
     }
 
-
-    public Pokemon getPokemonInMemory(String identifier){
+    public Pokemon getPokemon(String identifier){
+        //Try to find the Pokemon in memory, if that is not possible uses the PokeAPi
         Optional<Pokemon> pokemon = inMemoryRepository.getPokemonById(Integer.valueOf(identifier));
-        if(pokemon.isPresent()){
-            return pokemon.get();
-        }
-       throw new NoSuchElementException("The pokemon could not be found in memory");
+        return pokemon.orElseGet(() -> getPokemonByIdOrName(identifier));
     }
 
     public Move getMoveByIdOrName(String identifier){
@@ -53,14 +50,12 @@ public class PokeApiService {
 
 
     public List<Type> getPokemonTypes(String id){
-        List<Type> typeList = new ArrayList<>();
-        Optional<Pokemon> pokemon = inMemoryRepository.getPokemonById(Integer.valueOf(id));
-        if(pokemon.isPresent()){
-            PokemonClientDTO dto = mapper.map(pokemon.get(), PokemonClientDTO.class);
-            List<TypeDTO> dtoList = dto.getTypes().stream().map(pokeType-> reactiveClient.getNamedResource(pokeType.getType(), TypeDTO.class).block()).toList();
-            typeList = dtoList.stream().map(t->mapper.map(t, Type.class)).toList();
-        }
-        return typeList;
+        //Try to find the Pokemon in memory, if that is not possible uses the PokeAPi
+        Pokemon pokemon = inMemoryRepository.getPokemonById(Integer.valueOf(id)).orElseGet(() -> getPokemonByIdOrName(id));
+
+        PokemonClientDTO dto = mapper.map(pokemon, PokemonClientDTO.class);
+        List<TypeDTO> dtoList = dto.getTypes().stream().map(pokeType-> reactiveClient.getNamedResource(pokeType.getType(), TypeDTO.class).block()).toList();
+        return dtoList.stream().map(t->mapper.map(t, Type.class)).toList();
     }
 
     public Type getPokemonMoveType(Move move){
@@ -85,14 +80,13 @@ public class PokeApiService {
         inMemoryRepository.addPokemonList(pokemonList);
     }
 
-
-    //TODO If we cannot find the Pokemon in memory we can use these methods and try searching for it in PokeApi.
     public Pokemon getPokemonByIdOrName(String identifier){
         PokemonClientDTO pokemonDTO = reactiveClient.getPokemon(identifier).block();
         logger.info("Mapping to model the pokemon with id {}", pokemonDTO.getId());
         return this.mapper.map(pokemonDTO, Pokemon.class);
     }
 
+    //Possibly deprecated
     public List<Type> getPokemonTypesInfo(String identifier){
         return reactiveClient.getPokemonTypesInfo(identifier)
                 .map(type -> mapper.map(type, Type.class))
