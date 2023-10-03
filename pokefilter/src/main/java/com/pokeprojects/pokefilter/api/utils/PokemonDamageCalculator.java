@@ -3,6 +3,7 @@ package com.pokeprojects.pokefilter.api.utils;
 import com.pokeprojects.pokefilter.api.model.move.Move;
 import com.pokeprojects.pokefilter.api.model.pokemon.Pokemon;
 import com.pokeprojects.pokefilter.api.model.type.Type;
+import com.pokeprojects.pokefilter.api.model.pokemon.PokemonStat;
 import com.pokeprojects.pokefilter.api.services.pokemon.PokeApiService;
 import org.springframework.stereotype.Component;
 
@@ -33,35 +34,83 @@ public class PokemonDamageCalculator {
 
     public Double damageCalculator(Pokemon attacker, Pokemon defender, Move moveUsed){
         String statName = moveUsed.getDamageClass().getName().equals("physical") ? "attack" : "special-attack";
-        String defenseStatName = statName.equals("attack") ? "defense" : "special-defense";
 
-        Integer attackerStat = attacker.getStats().stream().filter(s->s.getStat().getName().equals(statName)).findFirst().get().getBaseStat();
-        Integer defenderStat = defender.getStats().stream().filter(s->s.getStat().getName().equals(defenseStatName)).findFirst().get().getBaseStat();
+        int attackerStat = getStat(attacker,statName);
+        int defenderStat = getStat(defender,getDefenseStatName(statName));
 
-        Integer defenderHP = defender.getStats().stream().filter(s->s.getStat().getName().equals("hp")).findFirst().get().getBaseStat();
+        int defenderHP = getStat(defender, "hp");
 
-        int hpScaledFactor = (2 * defenderHP + IV + EV/4 + 100) * LEVEL/100 +10;
-        int attackScaledFactor = (2 * attackerStat + IV + EV/4) * LEVEL/100 +5;
-        int defenseScaledFactor = (2 * defenderStat + IV + EV/4) * LEVEL/100 +5;
+        int hpScaledFactor = calculateHPScaledFactor(defenderHP, LEVEL);
+        int attackScaledFactor = calculateStatScaledFactor(attackerStat, LEVEL);
+        int defenseScaledFactor = calculateStatScaledFactor(defenderStat, LEVEL);
 
-        double powerAndStats = (double) moveUsed.getPower() * attackScaledFactor/defenseScaledFactor;
-        double levelFactor = (double) ((2 * 50)/5 + 2)/50;
+        double powerAndStats = calculatePowerAndStats(moveUsed,attackScaledFactor,defenseScaledFactor);
+        double levelFactor = calculateLevelFactor(LEVEL);
 
         List<Type> attackerTypes = pokeApiService.getPokemonTypes(attacker.getId().toString());
         List<Type> defenderTypes = pokeApiService.getPokemonTypes(defender.getId().toString());
         Type moveType = pokeApiService.getPokemonMoveType(moveUsed);
 
-        double stabMultiplier = attackerTypes.stream().anyMatch(type-> type.getName().equals(moveType.getName())) ? STAB : REGULAR_DAMAGE;
+        double stabMultiplier = calculateStabMultiplier(attackerTypes,moveType);
 
-        double immunity = defenderTypes.stream().anyMatch(type -> type.getDamageRelations().getNoDamageFrom().stream().anyMatch(t -> t.getName().equals(moveType.getName()))) ? NO_DAMAGE : 1.0;
+        double immunity = calculateImmunity(defenderTypes,moveType);
         double weaknessMult = REGULAR_DAMAGE;
         double resistenceMult = REGULAR_DAMAGE;
         if(immunity != NO_DAMAGE){
-            weaknessMult = defenderTypes.stream().mapToDouble(type-> type.getDamageRelations().getDoubleDamageFrom().stream().anyMatch(t -> t.getName().equals(moveType.getName())) ? WEAK : NO_DAMAGE).sum();
-            resistenceMult = defenderTypes.stream().map(type-> type.getDamageRelations().getHalfDamageFrom().stream().anyMatch(t -> t.getName().equals(moveType.getName())) ? RESISTED : REGULAR_DAMAGE)
-                    .reduce(resistenceMult, (a, b) -> a * b);
+            weaknessMult = calculateWeaknessMultiplier(defenderTypes,moveType);
+            resistenceMult = calculateResistanceMultiplier(defenderTypes, moveType);
         }
 
-        return 100 - ( (hpScaledFactor - levelFactor * powerAndStats * stabMultiplier * immunity * weaknessMult * resistenceMult)/hpScaledFactor ) * 100;
+        return 100 - ( (hpScaledFactor - (levelFactor * powerAndStats + 2) * stabMultiplier * immunity * weaknessMult * resistenceMult)/hpScaledFactor ) * 100;
+    }
+
+    public int getStat(Pokemon pokemon, String statName) {
+       return pokemon.getStats().stream()
+                .filter(s -> s.getStat().getName().equals(statName))
+                .findFirst()
+                .map(PokemonStat::getBaseStat)
+                .orElse(0);
+    }
+
+    public String getDefenseStatName(String damageClassName) {
+        return damageClassName.equals("physical") ? "defense" : "special-defense";
+    }
+
+    public int calculateHPScaledFactor(int baseHP,  int level) {
+        return (2 * baseHP + IV + EV / 4 + 100) * level / 100 + 10;
+    }
+
+    public int calculateStatScaledFactor(int baseStat, int level) {
+        return (2 * baseStat + IV + EV/4) * level/100 +5;
+    }
+
+    public double calculateLevelFactor(Integer level) {
+        return (double) ((2 * level) / 5 + 2) / 50;
+    }
+
+    public double calculatePowerAndStats(Move move, int attackScaledFactor, int defenseScaledFactor) {
+        return (double) move.getPower() * attackScaledFactor / defenseScaledFactor;
+    }
+
+    public double calculateStabMultiplier(List<Type> attackerTypes, Type moveType) {
+        return attackerTypes.stream().anyMatch(type -> type.getName().equals(moveType.getName())) ? STAB : REGULAR_DAMAGE;
+    }
+
+    private double calculateImmunity(List<Type> defenderTypes, Type moveType) {
+        return defenderTypes.stream().anyMatch(type -> type.getDamageRelations().getNoDamageFrom().stream().anyMatch(t -> t.getName().equals(moveType.getName()))) ? NO_DAMAGE : 1.0;
+    }
+
+    public double calculateWeaknessMultiplier(List<Type> defenderTypes, Type moveType) {
+        return defenderTypes.stream()
+                .mapToDouble(type-> type.getDamageRelations()
+                        .getDoubleDamageFrom().stream().anyMatch(t -> t.getName().equals(moveType.getName()))
+                        ? WEAK : NO_DAMAGE).sum();
+
+    }
+
+    public double calculateResistanceMultiplier(List<Type> defenderTypes, Type moveType) {
+        double resistanceMulti = REGULAR_DAMAGE;
+        return defenderTypes.stream().map(type-> type.getDamageRelations().getHalfDamageFrom().stream().anyMatch(t -> t.getName().equals(moveType.getName())) ? RESISTED : REGULAR_DAMAGE)
+                .reduce(resistanceMulti, (a, b) -> a * b);
     }
 }
