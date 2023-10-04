@@ -24,7 +24,8 @@ public class StartupListener {
 
     @EventListener(ApplicationReadyEvent.class)
     public void doSomethingAfterStartup() {
-        pokeApiService.loadAllPokemonInMemory();
+        pokeApiService.loadStartupData();
         logger.info("Pokemon list loaded in memory");
+        logger.info("Pokemon indexes loaded in memory");
     }
 }

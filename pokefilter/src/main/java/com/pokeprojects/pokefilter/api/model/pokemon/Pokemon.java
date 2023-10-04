@@ -1,5 +1,7 @@
 package com.pokeprojects.pokefilter.api.model.pokemon;
 
+import com.pokeprojects.pokefilter.api.model.pokemon_species.EvolutionChain;
+import com.pokeprojects.pokefilter.api.model.pokemon_species.PokemonSpecies;
 import com.pokeprojects.pokefilter.api.model.sprites.PokemonSprites;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -25,4 +27,5 @@ public class Pokemon {
     private PokemonSprites sprites;
     private List<PokemonStat> stats;
     private List<PokemonType> types;
+    private PokemonSpecies species;
 }

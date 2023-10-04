@@ -67,35 +67,8 @@ public class PokemonController {
 
     @GetMapping("/filter-params")
     public ResponseEntity<List<PokemonSmallDTO>> filterPokemonByParams(@RequestParam Map<String, String> requestParams) {
-
-        // Create a list of predicates to represent filter criteria
-        List<Predicate<Pokemon>> criteria = new ArrayList<>();
-
-        // Iterate through the request parameters and build the filter criteria dynamically
-        for (Map.Entry<String, String> entry : requestParams.entrySet()) {
-            String paramName = entry.getKey();
-            String paramValue = entry.getValue();
-
-            // Find the corresponding filter in the PokemonFilters enum
-            PokemonFilters filter = findFilterByName(paramName);
-
-            if (!paramValue.equals(filter.getDefaultValue())) {
-                Predicate<Pokemon> filterPredicate = filter.getFilterCondition(paramValue);
-                criteria.add(filterPredicate);
-            }
-        }
-        List<Pokemon> pokemonList = pokeApiService.getAllPokemonByFilters(criteria);
-
+        List<Pokemon> pokemonList = pokeApiService.getAllPokemonByFilters(requestParams);
         return ResponseEntity.ok(pokemonList.stream().map(poke -> modelMapper.map(poke, PokemonSmallDTO.class)).toList());
-    }
-
-    private PokemonFilters findFilterByName(String paramName) {
-        for (PokemonFilters filter : PokemonFilters.values()) {
-            if (filter.getFilterName().equals(paramName)) {
-                return filter;
-            }
-        }
-        throw new NoSuchElementException("At least one of your filter parameters is not valid, please try again"); // Return null for unknown filter names
     }
 
 }
