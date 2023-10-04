@@ -1,0 +1,173 @@
+---
+interface Props {
+	title: string;
+}
+
+const { title } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="description" content="Astro description" />
+		<meta name="viewport" content="width=device-width" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="generator" content={Astro.generator} />
+		<title>{title}</title>
+	</head>
+	<body>
+		<header>
+			<i>Logo</i>
+			<i>&lt;Search docs&gt;</i>
+		</header>
+		<aside>
+			<ul>
+				<li>
+					<a href="get-started">Get started</a>
+				</li>
+				<li>
+					<a href="build-team">Build my team</a>
+				</li>
+				<li>
+					<a href="pokemon-compare">Compare with rival</a>
+				</li>
+				<li>
+					<a href="pokemon-search">Pokemons</a>
+				</li>
+			</ul>
+		</aside>
+		<slot />
+		<footer>Poke-project footer</footer>
+	</body>
+</html>
+<style is:global>
+	:root {
+		--accent: 136, 58, 234;
+		--accent-light: 224, 204, 250;
+		--accent-dark: 49, 10, 101;
+		--accent-gradient: linear-gradient(
+			45deg,
+			rgb(var(--accent)),
+			rgb(var(--accent-light)) 30%,
+			white 60%
+		);
+	}
+	* {
+		box-sizing: border-box;
+	}
+	html {
+		font-family: system-ui, sans-serif;
+		background: #13151a;
+		background-size: 224px;
+	}
+	body {
+		/* padding-top: 2em; */
+		margin: 0;
+		min-height: 100vh;
+	}
+	header {
+		background-color: aliceblue;
+		height: 4rem;
+		width: 100%;
+		position: fixed;
+		top: 0;
+		z-index: 1;
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		padding: 0 2rem;
+		max-width: 100%;
+	}
+	aside {
+		background-color: aliceblue;
+		position: fixed;
+		left: 0;
+		top: 4rem;
+		margin-top: 3rem; /* refactor to work with main h1 top margin as a constant to avoid missplacing */
+		padding: 1rem 2rem;
+		display: flex;
+		flex-flow: column;
+	}
+	aside ul {
+		list-style: none;
+		padding-inline-start: 0;
+	}
+	aside ul li {
+		padding: 0.5em 0;
+	}
+	aside ul li a {
+		text-decoration: none;
+	}
+	main {
+		margin: auto;
+		padding: 4rem 2rem;
+		width: 800px;
+		min-height: 100vh;
+		max-width: calc(100% - 2rem);
+		color: white;
+		font-size: 20px;
+		line-height: 1.6;
+	}
+	footer {
+		width: 100%;
+		background-color: aliceblue;
+		/* position: absolute;
+		bottom: 0; */
+	}
+	.astro-a {
+		position: absolute;
+		top: 4rem;
+		left: 50%;
+		transform: translatex(-50%);
+		width: 220px;
+		height: auto;
+		z-index: -1;
+	}
+	h1 {
+		font-size: 4rem;
+		font-weight: 700;
+		line-height: 1;
+		text-align: center;
+		margin-bottom: 1em;
+	}
+	.text-gradient {
+		background-image: var(--accent-gradient);
+		-webkit-background-clip: text;
+		-webkit-text-fill-color: transparent;
+		background-size: 400%;
+		background-position: 0%;
+	}
+	code {
+		font-family:
+			Menlo,
+			Monaco,
+			Lucida Console,
+			Liberation Mono,
+			DejaVu Sans Mono,
+			Bitstream Vera Sans Mono,
+			Courier New,
+			monospace;
+	}
+	.instructions {
+		margin-bottom: 2rem;
+		border: 1px solid rgba(var(--accent-light), 25%);
+		background: linear-gradient(rgba(var(--accent-dark), 66%), rgba(var(--accent-dark), 33%));
+		padding: 1.5rem;
+		border-radius: 8px;
+	}
+	.instructions code {
+		font-size: 0.8em;
+		font-weight: bold;
+		background: rgba(var(--accent-light), 12%);
+		color: rgb(var(--accent-light));
+		border-radius: 4px;
+		padding: 0.3em 0.4em;
+	}
+	.instructions strong {
+		color: rgb(var(--accent-light));
+	}
+	.instructions .instructions-sidenotes {
+		background-color: rgba(var(--accent-light), 0.3);
+	}
+</style>

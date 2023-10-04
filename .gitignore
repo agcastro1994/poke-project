@@ -1,0 +1,8 @@
+# IDE config files
+.vscode
+
+# local api build
+target
+
+# dependencies
+node_modules
