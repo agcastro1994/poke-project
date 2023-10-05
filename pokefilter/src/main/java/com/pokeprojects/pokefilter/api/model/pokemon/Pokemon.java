@@ -1,6 +1,5 @@
 package com.pokeprojects.pokefilter.api.model.pokemon;
 
-import com.pokeprojects.pokefilter.api.model.pokemon_species.EvolutionChain;
 import com.pokeprojects.pokefilter.api.model.pokemon_species.PokemonSpecies;
 import com.pokeprojects.pokefilter.api.model.sprites.PokemonSprites;
 import lombok.AllArgsConstructor;
@@ -9,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.List;
+import java.util.Objects;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -28,4 +28,17 @@ public class Pokemon {
     private List<PokemonStat> stats;
     private List<PokemonType> types;
     private PokemonSpecies species;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Pokemon pokemon = (Pokemon) o;
+        return Objects.equals(id, pokemon.id) && name.equals(pokemon.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return 31 * id + name.hashCode();
+    }
 }

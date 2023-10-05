@@ -1,7 +1,6 @@
 package com.pokeprojects.pokefilter.api.enums;
 
 import com.pokeprojects.pokefilter.api.model.pokemon.Pokemon;
-
 import java.util.function.BinaryOperator;
 import java.util.function.Predicate;
 

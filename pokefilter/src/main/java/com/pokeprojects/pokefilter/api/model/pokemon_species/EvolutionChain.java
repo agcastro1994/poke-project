@@ -1,8 +1,5 @@
 package com.pokeprojects.pokefilter.api.model.pokemon_species;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.databind.PropertyNamingStrategies;
-import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.pokeprojects.pokefilter.api.resources.StandardApiResource;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

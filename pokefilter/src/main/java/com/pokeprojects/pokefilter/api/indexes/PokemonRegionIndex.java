@@ -2,18 +2,19 @@ package com.pokeprojects.pokefilter.api.indexes;
 
 import com.pokeprojects.pokefilter.api.enums.Region;
 import com.pokeprojects.pokefilter.api.model.pokemon.Pokemon;
-import com.pokeprojects.pokefilter.api.model.pokemon.PokemonType;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 @Component
 public class PokemonRegionIndex implements PokemonIndex {
     private ConcurrentMap<String, List<Pokemon>> regionIndex;
+    private final int REGIONS_QUANTITY = 9;
 
     public PokemonRegionIndex() {
         regionIndex = new ConcurrentHashMap<>();
@@ -33,7 +34,23 @@ public class PokemonRegionIndex implements PokemonIndex {
     }
 
     @Override
-    public List<Pokemon> getPokemonByIndex(String key) {
+    public List<Pokemon> getListByIndex(String key) {
         return regionIndex.getOrDefault(key, Collections.emptyList());
+    }
+
+    @Override
+    public Boolean containsKey(String key){
+        return regionIndex.containsKey(key);
+    }
+
+    @Override
+    public Boolean isLoaded(){
+        return regionIndex.keySet().size() == REGIONS_QUANTITY &&
+                regionIndex.values().stream().noneMatch(List::isEmpty);
+    }
+
+    @Override
+    public Set<String> getKeySet(){
+        return regionIndex.keySet();
     }
 }

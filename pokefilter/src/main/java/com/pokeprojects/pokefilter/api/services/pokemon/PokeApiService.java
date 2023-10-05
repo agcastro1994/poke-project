@@ -3,14 +3,11 @@ package com.pokeprojects.pokefilter.api.services.pokemon;
 import com.pokeprojects.pokefilter.api.client.pokeapi.PokeReactiveClient;
 import com.pokeprojects.pokefilter.api.dto.move.MoveDTO;
 import com.pokeprojects.pokefilter.api.dto.pokemon.PokemonClientDTO;
-import com.pokeprojects.pokefilter.api.dto.pokemon_species.ChainDTO;
-import com.pokeprojects.pokefilter.api.dto.pokemon_species.EvolutionChainDTO;
 import com.pokeprojects.pokefilter.api.dto.type.TypeDTO;
 import com.pokeprojects.pokefilter.api.enums.MatchStrategy;
 import com.pokeprojects.pokefilter.api.enums.PokemonFilters;
 import com.pokeprojects.pokefilter.api.enums.Region;
 import com.pokeprojects.pokefilter.api.indexes.PokemonIndex;
-import com.pokeprojects.pokefilter.api.indexes.PokemonTypeIndex;
 import com.pokeprojects.pokefilter.api.model.move.Move;
 import com.pokeprojects.pokefilter.api.model.pokemon.Pokemon;
 import com.pokeprojects.pokefilter.api.model.pokemon_species.Chain;
@@ -40,6 +37,7 @@ public class PokeApiService {
     private PokemonIndex regionIndex;
     private Logger logger = LoggerFactory.getLogger(PokeApiService.class);
     private volatile boolean isLoading = false;
+    private final int KNOWN_POKEMON_QUANTITY = 1010;
 
 
     public PokeApiService(PokeReactiveClient reactiveClient, ModelMapper mapper, FilterService filterService, PokemonInMemoryRepository inMemoryRepository, PokemonSpeciesService speciesService, @Qualifier("pokemonTypeIndex") PokemonIndex typeIndex, @Qualifier("pokemonRegionIndex") PokemonIndex regionIndex) {
@@ -96,7 +94,15 @@ public class PokeApiService {
     public List<Pokemon> getAllPokemonByFilters(Map<String, String> criteriaMap){
         // Create a list of predicates to represent filter criteria
         List<Predicate<Pokemon>> criteria = new ArrayList<>();
-        List<Pokemon> pokemonList = getAllPokemon();
+        List<Pokemon> pokemonList;
+
+        //If our index is fully loaded we shall not fear any upcoming filters
+        if(regionIndex.isLoaded()){
+            pokemonList = getAllPokemon();
+        } else {
+            pokemonList = getBaseListToFilter(criteriaMap);
+        }
+
         Set<Pokemon> filteredResults = new HashSet<>(pokemonList);
 
         // Iterate through the request parameters and build the filter criteria dynamically
@@ -109,7 +115,7 @@ public class PokeApiService {
 
             if (!paramValue.equals(filter.getDefaultValue())) {
                 if (filter.isIndexed() && !isLoading) {
-                    List<Pokemon> indexList = getIndexForFilter(filter).getPokemonByIndex(paramValue);
+                    List<Pokemon> indexList = getIndexForFilter(filter).getListByIndex(paramValue);
                     // Intersect the indexList with the filteredResults using retainAll
                     filteredResults.retainAll(indexList);
                 } else {
@@ -118,7 +124,11 @@ public class PokeApiService {
                 }
             }
         }
-        return getAllPokemonByFilters(new ArrayList<>(filteredResults), criteria);
+        List<Pokemon> filteredList = getAllPokemonByFilters(new ArrayList<>(filteredResults), criteria);
+
+        //Remove possible duplicates
+        Set<Pokemon> set = new HashSet<>(filteredList);
+        return new ArrayList<>(set);
     }
 
     private PokemonFilters findFilterByName(String paramName) {
@@ -128,6 +138,41 @@ public class PokeApiService {
             }
         }
         throw new NoSuchElementException("At least one of your filter parameters is not valid, please try again"); // Return null for unknown filter names
+    }
+
+    /**
+     *  This function is used in the case that our index is not fully loaded. If the region filter is present
+     *  this criterion is removed from the map because it's going to be applied here.
+     *  Then checks is the region is already loaded, if not, search for it using the API.
+     *  If there is no region filter we search in the API for the missing regions to complete the whole Pokemon list
+     * @param criteriaMap Map with the filters received
+     * @return
+     */
+    private List<Pokemon> getBaseListToFilter(Map<String,String> criteriaMap){
+        String regionFilterName = PokemonFilters.REGION.getFilterName();
+        boolean useRegion = criteriaMap.containsKey(regionFilterName);
+
+        if(useRegion){
+            Region reg =  Region.valueOf(criteriaMap.get(regionFilterName));
+            criteriaMap.remove(regionFilterName);
+            return regionIndex.containsKey(reg.name())
+                   ? regionIndex.getListByIndex(reg.name())
+                   : reactiveClient.getAllPokemonByRegion(reg).stream().map(p -> mapper.map(p, Pokemon.class)).toList();
+        }
+
+        List<Region> missingRegions = Region.getAllRegions().stream()
+                .filter(region -> !regionIndex.getKeySet().contains(region.name()))
+                .toList();
+
+        List<Pokemon> currentList = getAllPokemon();
+        List<Pokemon> mergedList = new ArrayList<>(currentList);
+
+        missingRegions.forEach(region -> {
+            List<PokemonClientDTO> pokemonDTOs = reactiveClient.getAllPokemonByRegion(region);
+            List<Pokemon> mappedPokemon = pokemonDTOs.stream().map(p -> mapper.map(p, Pokemon.class)).toList();
+            mergedList.addAll(mappedPokemon);
+        });
+        return mergedList;
     }
 
     public void loadStartupData(){

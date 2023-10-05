@@ -1,9 +1,6 @@
 package com.pokeprojects.pokefilter.api.controllers;
 
-import com.pokeprojects.pokefilter.api.dto.pokemon.PokemonExternalDTO;
 import com.pokeprojects.pokefilter.api.dto.pokemon_species.EvolutionChainDTO;
-import com.pokeprojects.pokefilter.api.dto.pokemon_species.PokemonSpeciesDTO;
-import com.pokeprojects.pokefilter.api.model.pokemon.Pokemon;
 import com.pokeprojects.pokefilter.api.services.pokemon_species.PokemonSpeciesService;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
@@ -31,11 +28,4 @@ public class PokemonSpeciesController {
         logger.info("Retrieving pokemon species with identifier {}", id);
         return ResponseEntity.ok(chain);
     }
-
-    //Provisional
-//    @GetMapping("/evolution-chain/fully-evolved/{id}")
-//    public ResponseEntity<Boolean> isFullyEvolved(@PathVariable String id) {
-//       Boolean isFullyEvolved = service.isPokemonFullyEvolved(id);
-//       return ResponseEntity.ok(isFullyEvolved);
-//    }
 }

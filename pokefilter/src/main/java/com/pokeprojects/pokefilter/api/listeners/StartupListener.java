@@ -1,6 +1,5 @@
 package com.pokeprojects.pokefilter.api.listeners;
 
-import com.pokeprojects.pokefilter.api.controllers.PokemonController;
 import com.pokeprojects.pokefilter.api.services.pokemon.PokeApiService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

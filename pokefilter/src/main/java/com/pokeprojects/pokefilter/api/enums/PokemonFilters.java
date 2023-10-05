@@ -1,10 +1,7 @@
 package com.pokeprojects.pokefilter.api.enums;
 
-import com.pokeprojects.pokefilter.api.indexes.PokemonIndex;
-import com.pokeprojects.pokefilter.api.indexes.PokemonTypeIndex;
 import com.pokeprojects.pokefilter.api.model.pokemon.Pokemon;
 import com.pokeprojects.pokefilter.api.model.pokemon.PokemonStat;
-import com.pokeprojects.pokefilter.api.model.stat.Stat;
 import lombok.Getter;
 
 import java.util.Comparator;

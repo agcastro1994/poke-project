@@ -3,7 +3,6 @@ package com.pokeprojects.pokefilter.api.controllers;
 import com.pokeprojects.pokefilter.api.dto.pokemon.PokemonExternalDTO;
 import com.pokeprojects.pokefilter.api.dto.pokemon.PokemonSmallDTO;
 import com.pokeprojects.pokefilter.api.dto.type.TypeExternalDTO;
-import com.pokeprojects.pokefilter.api.enums.PokemonFilters;
 import com.pokeprojects.pokefilter.api.model.move.Move;
 import com.pokeprojects.pokefilter.api.model.pokemon.Pokemon;
 import com.pokeprojects.pokefilter.api.model.type.Type;
@@ -14,12 +13,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.NoSuchElementException;
-import java.util.function.Predicate;
 
 @RestController
 @ResponseBody

@@ -1,7 +1,6 @@
 package com.pokeprojects.pokefilter.api.enums;
 
 import lombok.Getter;
-
 import java.util.Arrays;
 import java.util.List;
 import java.util.NoSuchElementException;

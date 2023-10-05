@@ -7,12 +7,15 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 @Component
 public class PokemonTypeIndex implements PokemonIndex {
     private ConcurrentMap<String, List<Pokemon>> typeIndex;
+
+    private final int TYPES_QUANTITY = 18;
 
     public PokemonTypeIndex() {
         typeIndex = new ConcurrentHashMap<>();
@@ -34,7 +37,23 @@ public class PokemonTypeIndex implements PokemonIndex {
     }
 
     @Override
-    public List<Pokemon> getPokemonByIndex(String key) {
+    public List<Pokemon> getListByIndex(String key) {
         return typeIndex.getOrDefault(key, Collections.emptyList());
+    }
+
+    @Override
+    public Boolean containsKey(String key){
+        return typeIndex.containsKey(key);
+    }
+
+    @Override
+    public Boolean isLoaded(){
+        return typeIndex.keySet().size() == TYPES_QUANTITY &&
+                typeIndex.values().stream().noneMatch(List::isEmpty);
+    }
+
+    @Override
+    public Set<String> getKeySet(){
+        return typeIndex.keySet();
     }
 }

@@ -28,8 +28,15 @@ public class ExceptionController {
         return new ResponseEntity<>(new StandardErrorDTO(HttpStatus.NOT_FOUND.name(), e.getMessage()), HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(UnsupportedOperationException.class)
+    public ResponseEntity<StandardErrorDTO> handleUnsupportedOperationException(UnsupportedOperationException e){
+        return new ResponseEntity<>(new StandardErrorDTO(HttpStatus.INTERNAL_SERVER_ERROR.name(), "There was an error in our server, please try again"), HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<StandardErrorDTO> handleGeneralError(Exception e){
         return new ResponseEntity<>(new StandardErrorDTO(HttpStatus.INTERNAL_SERVER_ERROR.name(), "There was an error in our server, please try again"), HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
+
 }
