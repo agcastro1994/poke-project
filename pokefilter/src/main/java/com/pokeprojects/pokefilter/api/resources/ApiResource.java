@@ -5,6 +5,6 @@ import lombok.Setter;
 
 @Setter
 @Getter
-public class ApiResource {
+public class ApiResource<T extends StandardApiResource> {
     private String url;
 }

@@ -84,11 +84,11 @@ public class PokemonDamageCalculator {
         return (2 * baseStat + IV + EV/4) * level/100 +5;
     }
 
-    public double calculateLevelFactor(Integer level) {
+    private double calculateLevelFactor(Integer level) {
         return (double) ((2 * level) / 5 + 2) / 50;
     }
 
-    public double calculatePowerAndStats(Move move, int attackScaledFactor, int defenseScaledFactor) {
+    private double calculatePowerAndStats(Move move, int attackScaledFactor, int defenseScaledFactor) {
         return (double) move.getPower() * attackScaledFactor / defenseScaledFactor;
     }
 
@@ -96,7 +96,7 @@ public class PokemonDamageCalculator {
         return attackerTypes.stream().anyMatch(type -> type.getName().equals(moveType.getName())) ? STAB : REGULAR_DAMAGE;
     }
 
-    private double calculateImmunity(List<Type> defenderTypes, Type moveType) {
+    public double calculateImmunity(List<Type> defenderTypes, Type moveType) {
         return defenderTypes.stream().anyMatch(type -> type.getDamageRelations().getNoDamageFrom().stream().anyMatch(t -> t.getName().equals(moveType.getName()))) ? NO_DAMAGE : 1.0;
     }
 

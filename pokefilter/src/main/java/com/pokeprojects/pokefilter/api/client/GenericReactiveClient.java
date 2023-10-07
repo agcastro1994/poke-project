@@ -1,6 +1,7 @@
 package com.pokeprojects.pokefilter.api.client;
 
 import com.pokeprojects.pokefilter.api.dto.PageResponseDTO;
+import com.pokeprojects.pokefilter.api.resources.ApiResource;
 import com.pokeprojects.pokefilter.api.resources.NamedApiResource;
 import com.pokeprojects.pokefilter.api.resources.StandardApiResource;
 import org.springframework.core.ParameterizedTypeReference;
@@ -35,12 +36,24 @@ public abstract class GenericReactiveClient {
                 .flatMap(resource -> getNamedResource(resource, cls));
     }
 
+    public <T extends StandardApiResource> Mono<T> followSingleResource(Supplier<ApiResource<T>> resourceSupplier, Class<T> cls) {
+        return Mono.fromSupplier(resourceSupplier)
+                .flatMap(resource -> getSingleResource(resource, cls));
+    }
+
     public <T extends StandardApiResource> Flux<T> followResources(Supplier<List<NamedApiResource<T>>> resourcesSupplier, Class<T> cls) {
         return Mono.fromSupplier(resourcesSupplier)
                 .flatMapMany(resources -> getNamedResources(resources, cls));
     }
 
     public <T extends StandardApiResource> Mono<T> getNamedResource(NamedApiResource<T> resource, Class<T> resourceClass) {
+        return webClient.get()
+                .uri(URI.create(resource.getUrl()))
+                .retrieve()
+                .bodyToMono(resourceClass);
+    }
+
+    public <T extends StandardApiResource> Mono<T> getSingleResource(ApiResource<T> resource, Class<T> resourceClass) {
         return webClient.get()
                 .uri(URI.create(resource.getUrl()))
                 .retrieve()

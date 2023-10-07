@@ -1,9 +1,9 @@
 package com.pokeprojects.pokefilter.api.enums;
 
 import lombok.Getter;
-
 import java.util.Arrays;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 @Getter
@@ -29,5 +29,14 @@ public enum Region {
 
     public static List<Region> getAllRegions(){
         return Arrays.stream(Region.values()).filter(r-> !r.equals(Region.ALL)).collect(Collectors.toList());
+    }
+
+    public static Region getRegionByPokemonId(Integer id) {
+        for (Region region : Region.values()) {
+            if (id > region.offset && id <= region.offset + region.limit) {
+                return region;
+            }
+        }
+        throw new NoSuchElementException("Invalid Pokémon ID: " + id);
     }
 }
