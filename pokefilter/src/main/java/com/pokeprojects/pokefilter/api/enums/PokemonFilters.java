@@ -48,10 +48,28 @@ public enum PokemonFilters{
             return pokemon -> selectedRegion.getOffset() < pokemon.getId() && pokemon.getId() <= selectedRegion.getLimit()+ selectedRegion.getOffset();
         }
     },
-    FULLY_EVOLVED("false","fully_evolved", false){
+    FULLY_EVOLVED("","fully_evolved", false){
         @Override
         public Predicate<Pokemon> getFilterCondition(String condition){
-            return null;
+            return pokemon -> pokemon.getIsFullyEvolved().equals(Boolean.parseBoolean(condition));
+        }
+    },
+    LEGENDARY("","legendary", false){
+        @Override
+        public Predicate<Pokemon> getFilterCondition(String condition){
+            return pokemon -> pokemon.getSpecies().is_legendary().equals(Boolean.parseBoolean(condition));
+        }
+    },
+    MYTHICAL("","mythical", false){
+        @Override
+        public Predicate<Pokemon> getFilterCondition(String condition){
+            return pokemon -> pokemon.getSpecies().is_mythical().equals(Boolean.parseBoolean(condition));
+        }
+    },
+    BABY("false","baby", false){
+        @Override
+        public Predicate<Pokemon> getFilterCondition(String condition){
+            return pokemon -> pokemon.getSpecies().is_baby().equals(Boolean.parseBoolean(condition));
         }
     };
 
