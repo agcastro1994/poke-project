@@ -10,6 +10,7 @@
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
     animation: App-logo-spin infinite 20s linear reverse;
+    filter: drop-shadow(0 0 12px #C07848);
   }
 }
 

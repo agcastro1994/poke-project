@@ -1,4 +1,4 @@
-import charizard from './charizards.svg';
+import charizard from './images/charizards.svg';
 import './App.css';
 
 function App() {
