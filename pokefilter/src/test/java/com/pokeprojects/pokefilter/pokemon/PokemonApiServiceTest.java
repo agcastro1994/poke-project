@@ -25,11 +25,11 @@ public class PokemonApiServiceTest {
         PokemonSprites sprites = mock(PokemonSprites.class);
         PokemonStat stat = mock(PokemonStat.class);
         PokemonType type = mock(PokemonType.class);
-        Pokemon pokemon1 = new Pokemon(6,"charizard", 267, 17, true, 7, 905, List.of(ability), List.of(move), sprites, List.of(stat), List.of(type));
-        Pokemon pokemon2 = new Pokemon(3,"venusaur", 263, 20, true, 3, 1000, List.of(ability), List.of(move), sprites, List.of(stat), List.of(type));
-        Pokemon pokemon3 = new Pokemon(9,"blastoise", 265, 16, true, 12, 855, List.of(ability), List.of(move), sprites, List.of(stat), List.of(type));
-        Pokemon pokemon4 = new Pokemon(59,"arcanine", 194, 19, true, 98, 1550, List.of(ability), List.of(move), sprites, List.of(stat), List.of(type));
-        Pokemon pokemon5 = new Pokemon(157,"typhlosion", 240, 17, true, 254, 795, List.of(ability), List.of(move), sprites, List.of(stat), List.of(type));
+        Pokemon pokemon1 = new Pokemon(6,"charizard", 267, 17, true, 7, 905, List.of(ability), List.of(move), sprites, List.of(stat), List.of(type),null,true);
+        Pokemon pokemon2 = new Pokemon(3,"venusaur", 263, 20, true, 3, 1000, List.of(ability), List.of(move), sprites, List.of(stat), List.of(type),null,true);
+        Pokemon pokemon3 = new Pokemon(9,"blastoise", 265, 16, true, 12, 855, List.of(ability), List.of(move), sprites, List.of(stat), List.of(type), null,true);
+        Pokemon pokemon4 = new Pokemon(59,"arcanine", 194, 19, true, 98, 1550, List.of(ability), List.of(move), sprites, List.of(stat), List.of(type), null,true);
+        Pokemon pokemon5 = new Pokemon(157,"typhlosion", 240, 17, true, 254, 795, List.of(ability), List.of(move), sprites, List.of(stat), List.of(type), null,true);
 
         pokemonList = List.of(pokemon1,pokemon2,pokemon3,pokemon4,pokemon5);
     }

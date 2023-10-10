@@ -10,11 +10,11 @@ import com.pokeprojects.pokefilter.api.enums.Region;
 import com.pokeprojects.pokefilter.api.indexes.PokemonIndex;
 import com.pokeprojects.pokefilter.api.model.move.Move;
 import com.pokeprojects.pokefilter.api.model.pokemon.Pokemon;
-import com.pokeprojects.pokefilter.api.model.pokemon_species.Chain;
-import com.pokeprojects.pokefilter.api.model.pokemon_species.EvolutionChain;
+import com.pokeprojects.pokefilter.api.model.records.PokemonSpecy;
 import com.pokeprojects.pokefilter.api.model.type.Type;
 import com.pokeprojects.pokefilter.api.repository.pokemon.PokemonInMemoryRepository;
 import com.pokeprojects.pokefilter.api.services.FilterService;
+import com.pokeprojects.pokefilter.api.services.graphql.EvolutionService;
 import com.pokeprojects.pokefilter.api.services.pokemon_species.PokemonSpeciesService;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
@@ -33,6 +33,7 @@ public class PokeApiService {
     private FilterService filterService;
     private PokemonInMemoryRepository inMemoryRepository;
     private PokemonSpeciesService speciesService;
+    private EvolutionService evolutionService;
     private PokemonIndex typeIndex;
     private PokemonIndex regionIndex;
     private Logger logger = LoggerFactory.getLogger(PokeApiService.class);
@@ -40,7 +41,7 @@ public class PokeApiService {
     private final int KNOWN_POKEMON_QUANTITY = 1010;
 
 
-    public PokeApiService(PokeReactiveClient reactiveClient, ModelMapper mapper, FilterService filterService, PokemonInMemoryRepository inMemoryRepository, PokemonSpeciesService speciesService, @Qualifier("pokemonTypeIndex") PokemonIndex typeIndex, @Qualifier("pokemonRegionIndex") PokemonIndex regionIndex) {
+    public PokeApiService(PokeReactiveClient reactiveClient, ModelMapper mapper, FilterService filterService, PokemonInMemoryRepository inMemoryRepository, PokemonSpeciesService speciesService, @Qualifier("pokemonTypeIndex") PokemonIndex typeIndex, @Qualifier("pokemonRegionIndex") PokemonIndex regionIndex, EvolutionService evolutionService) {
         this.reactiveClient = reactiveClient;
         this.mapper = mapper;
         this.filterService = filterService;
@@ -48,6 +49,7 @@ public class PokeApiService {
         this.speciesService = speciesService;
         this.typeIndex = typeIndex;
         this.regionIndex = regionIndex;
+        this.evolutionService = evolutionService;
     }
 
     private PokemonIndex getIndexForFilter(PokemonFilters filter) {
@@ -175,15 +177,33 @@ public class PokeApiService {
         return mergedList;
     }
 
-    public void loadStartupData(){
+    public void loadStartupData() {
         isLoading = true;
+        List<PokemonSpecy> species  = evolutionService.getSpecies();
+        List<PokemonSpecy> evolvedSpecies  = evolutionService.getSpeciesEvolutionData();
+        List<PokemonSpecy> lastEvolutions =  fullyEvolvedSpecies(evolvedSpecies);
         for(Region region : Region.getAllRegions()){
             List<Pokemon> regionPokemon = reactiveClient.getAllPokemonByRegion(region).stream().map(poke -> mapper.map(poke, Pokemon.class)).toList();
+
+            regionPokemon.forEach(poke -> {
+                PokemonSpecy spe = species.stream().filter(sp -> Objects.equals(sp.id(), poke.getId())).findFirst().get();
+                poke.setSpecies(spe);
+                poke.setIsFullyEvolved(lastEvolutions.stream().anyMatch(spec-> Objects.equals(spec.id(), poke.getId())) || poke.getSpecies().is_legendary() || poke.getSpecies().is_mythical());
+            });
             loadPokemonInMemory(regionPokemon);
             typeIndex.loadIndex(regionPokemon);
             regionIndex.loadIndex(regionPokemon);
         }
         isLoading = false;
+    }
+
+    private List<PokemonSpecy> fullyEvolvedSpecies(List<PokemonSpecy> species){
+        Set<Integer> evolvesFromSet = species.stream()
+                .map(PokemonSpecy::evolves_from_species_id)
+                .collect(Collectors.toSet());
+        return species.stream()
+                .filter(specy -> !evolvesFromSet.contains(specy.id()))
+                .toList();
     }
 
     public void loadPokemonInMemory(List<Pokemon> pokemonList){
@@ -196,27 +216,6 @@ public class PokeApiService {
         return this.mapper.map(pokemonDTO, Pokemon.class);
     }
 
-
-    public boolean isPokemonFullyEvolved(String id){
-        String pokemonName = getPokemon(id).getName();
-        EvolutionChain evolutionChain = mapper.map(speciesService.getEvolutionChain(id), EvolutionChain.class);
-        return isPokemonFullyEvolvedAux(evolutionChain.getChain(), pokemonName);
-    }
-
-    private boolean isPokemonFullyEvolvedAux(Chain element, String pokemonName){
-        if (element.isBaby()) return false;
-
-        if(element.getEvolvesTo().isEmpty()){
-            return true;
-        } else {
-            if(element.getSpecies().getName().equals(pokemonName)){
-                return false;
-            }
-        }
-
-        return isPokemonFullyEvolvedAux(element.getEvolvesTo().get(0), pokemonName);
-
-    }
 
     //Possibly deprecated
     public List<Type> getPokemonTypesInfo(String identifier){

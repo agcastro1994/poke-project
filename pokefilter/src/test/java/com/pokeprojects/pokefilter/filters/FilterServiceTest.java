@@ -6,6 +6,7 @@ import com.pokeprojects.pokefilter.api.enums.Region;
 import com.pokeprojects.pokefilter.api.model.pokemon.*;
 import com.pokeprojects.pokefilter.api.model.sprites.PokemonSprites;
 import com.pokeprojects.pokefilter.api.model.type.Type;
+import com.pokeprojects.pokefilter.api.resources.NamedApiResource;
 import com.pokeprojects.pokefilter.api.services.FilterService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -42,15 +43,15 @@ public class FilterServiceTest {
         PokemonType waterType = mock(PokemonType.class);
         PokemonType grassType = mock(PokemonType.class);
 
-        when(fireType.getType()).thenReturn(new Type(10,"fire",null,null,null));
-        when(waterType.getType()).thenReturn(new Type(11,"water",null,null,null));
-        when(grassType.getType()).thenReturn(new Type(12,"grass",null,null,null));
+        when(fireType.getType()).thenReturn(new NamedApiResource<>("fire", null));
+        when(waterType.getType()).thenReturn(new NamedApiResource<>("water", null));
+        when(grassType.getType()).thenReturn(new NamedApiResource<>("grass", null));
 
-        charizard = new Pokemon(6,"charizard", 267, 17, true, 7, 905, List.of(ability), List.of(move), sprites, List.of(stat), List.of(fireType));
-        venusaur = new Pokemon(3,"venusaur", 263, 20, true, 3, 1000, List.of(ability), List.of(move), sprites, List.of(stat), List.of(grassType));
-        blastoise = new Pokemon(9,"blastoise", 265, 16, true, 12, 855, List.of(ability), List.of(move), sprites, List.of(stat), List.of(waterType));
-        arcanine = new Pokemon(59,"arcanine", 194, 19, true, 98, 1550, List.of(ability), List.of(move), sprites, List.of(stat), List.of(fireType));
-        typhlosion = new Pokemon(157,"typhlosion", 240, 17, true, 254, 795, List.of(ability), List.of(move), sprites, List.of(stat), List.of(fireType));
+        charizard = new Pokemon(6,"charizard", 267, 17, true, 7, 905, List.of(ability), List.of(move), sprites, List.of(stat), List.of(fireType),null, true);
+        venusaur = new Pokemon(3,"venusaur", 263, 20, true, 3, 1000, List.of(ability), List.of(move), sprites, List.of(stat), List.of(grassType), null, true);
+        blastoise = new Pokemon(9,"blastoise", 265, 16, true, 12, 855, List.of(ability), List.of(move), sprites, List.of(stat), List.of(waterType), null, true);
+        arcanine = new Pokemon(59,"arcanine", 194, 19, true, 98, 1550, List.of(ability), List.of(move), sprites, List.of(stat), List.of(fireType), null, true);
+        typhlosion = new Pokemon(157,"typhlosion", 240, 17, true, 254, 795, List.of(ability), List.of(move), sprites, List.of(stat), List.of(fireType), null,true);
 
         pokemonList = List.of(charizard,venusaur,blastoise,arcanine,typhlosion);
     }
