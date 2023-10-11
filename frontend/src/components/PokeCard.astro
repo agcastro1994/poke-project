@@ -1,0 +1,92 @@
+---
+import type { PokemonType, Type } from '../types/Pokemon';
+import { ElementTypeInformation } from '../types/Pokemon';
+
+interface Props {
+	title: string;
+	types: PokemonType[];
+	href: string;
+  img: string;
+}
+
+const { href, title, types, img } = Astro.props;
+
+function getTypeImg(typeName: string) {
+  return ElementTypeInformation.find(type => type.name.toLocaleLowerCase() === typeName.toLocaleLowerCase())?.imgUrl;
+}
+
+// Calculate Main weaknesses ( double damage )
+let weaknesses: Type[] = [];
+types.forEach(t => (t.type.damageRelations.doubleDamageFrom.forEach(ddF => {
+	if (!weaknesses.find(w => w.name === ddF.name)) {
+		weaknesses.push(ddF);
+	}}))
+);
+---
+
+<li class="link-card">
+	<a href={href}>
+		<h2>
+			{title}
+			<!-- <span>&rarr;</span> -->
+		</h2>
+		{/* Main Image */}
+		{/* TODO carrousel with all images */}
+    <img class="main-image" src={img}/>
+		{/* Pokemon types */}
+		<p class="types">
+			Type
+			{types.map(t => <img src={getTypeImg(t.type.name)} alt={t.type.name} />)}
+		</p>
+    {/* Pokemon type weaknesses -- TODO split between different weakness grades */}
+		<p>
+			Weaknesses
+			{weaknesses.map(w => <span class="weakness"><img src={getTypeImg(w.name)} alt={w.name} /></span>)}
+		</p>
+	</a>
+</li>
+<style>
+	.link-card {
+		list-style: none;
+		display: flex;
+		padding: 1px;
+		background-color: #23262d;
+		background-image: none;
+		background-size: 400%;
+		border-radius: 7px;
+		background-position: 100%;
+		transition: background-position 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+		box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+	}
+	.link-card > a {
+		width: 100%;
+		text-decoration: none;
+		line-height: 1.4;
+		padding: calc(1.5rem - 1px);
+		border-radius: 8px;
+		color: white;
+		background-color: #23262d;
+		opacity: 0.8;
+	}
+  img {
+    margin: 0;
+    width: max-content;
+    height: auto;
+  }
+	h2 {
+		margin: 0;
+		font-size: 1.25rem;
+		transition: color 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+	}
+	p {
+		margin-top: 0.5rem;
+		margin-bottom: 0;
+	}
+	.link-card:is(:hover, :focus-within) {
+		background-position: 0;
+		background-image: var(--accent-gradient);
+	}
+	.link-card:is(:hover, :focus-within) h2 {
+		color: rgb(var(--accent-light));
+	}
+</style>

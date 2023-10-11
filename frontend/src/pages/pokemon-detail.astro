@@ -1,0 +1,106 @@
+---
+import {
+  ElementTypeInformation,
+  type Pokemon,
+  type Type,
+} from "../types/Pokemon";
+
+const response = await fetch(`http://localhost:8081/pokemon/:id`);
+const data = await response.json();
+const pokemon: Pokemon = data.content;
+
+// TODO move to utils functions
+function getTypeImg(typeName: string) {
+  return ElementTypeInformation.find(
+    (type) => type.name.toLocaleLowerCase() === typeName.toLocaleLowerCase(),
+  )?.imgUrl;
+}
+
+// Calculate Main weaknesses ( double damage )
+let weaknesses: Type[] = [];
+pokemon.types.forEach((t) =>
+  t.type.damageRelations.doubleDamageFrom.forEach((ddF) => {
+    if (!weaknesses.find((w) => w.name === ddF.name)) {
+      weaknesses.push(ddF);
+    }
+  }),
+);
+---
+
+<article class="pokemon">
+  <h2>{pokemon.name}</h2>
+  {/* Images carrousel = Sprites*/}
+  <div>
+    <img src={pokemon.sprites.frontDefault} />
+    <button>Prev</button>
+    <button>Next</button>
+  </div>
+  {/* Pokemon information */}
+  <div>
+    {/* Types */}
+    <p>
+      {
+        pokemon.types.map((t) => (
+          <img src={getTypeImg(t.type.name)} alt={t.type.name} />
+        ))
+      }
+    </p>
+    {/* Weaknesses */}
+    <p class="weakness">
+      {weaknesses.map((t) => <img src={getTypeImg(t.name)} alt={t.name} />)}
+    </p>
+    <ul>
+      <li>
+        Base experience: {pokemon.baseExperience}
+      </li>
+      <li>
+        Hieght: {pokemon.height}
+      </li>
+      <li>
+        Weight: {pokemon.weight}
+      </li>
+      <ul>
+        <h5>Stats</h5>
+        {pokemon.stats.map((stat) => <li>stat.name</li>)}
+      </ul>
+      <ul>
+        <h5>Abilities</h5>
+        {/* TODO add ability.ishidden */}
+        {pokemon.abilities.map((ability) => <li>{ability.ability.name}</li>)}
+      </ul>
+      <ul>
+        <h5>Moves</h5>
+        {
+          pokemon.moves.map((move) => (
+            <li>
+              <p>{move.move.name}</p>
+              <span>{move.move.accuracy}</span>
+              <span>{move.move.effectChance}</span>
+              <span>{move.move.pp}</span>
+              <span>{move.move.priority}</span>
+              <span>{move.move.power}</span>
+              <span>{move.move.damageClass.name}</span> {/* private NamedApiResource<MoveDamageClass> */}
+              <span>{move.move.type.name}</span> {/*private NamedApiResource<TypeDTO> */}
+            </li>
+          ))
+        }
+      </ul>
+    </ul>
+    {
+      /* 
+      id: number; -- no desired
+      name: string; -- done
+      baseExperience: number; -- done
+      height: number; -- done
+      isDefault: boolean;
+      order: number;
+      weight: number; -- done
+      abilities: PokemonAbility[]; -- half done
+      moves: Move[]; -- half done
+      sprites: PokemonSprites; -- half done mising carrousel
+      stats: Stat[]; --half donemissing values
+      types: PokemonType[]; -- done
+    */
+    }
+  </div>
+</article>

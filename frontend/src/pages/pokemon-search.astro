@@ -1,6 +1,14 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import Search from '../components/Search.astro';
+import Layout from "../layouts/Layout.astro";
+import Search from "../components/Search.astro";
+import PokeCard from "../components/PokeCard.astro";
+
+import type { Pokemon } from "../types/Pokemon";
+
+const response = await fetch("http://localhost:8081/pokemon/filter");
+const data = await response.json();
+console.log("Response ", data);
+const pokemons = data.content;
 ---
 
 <Layout title="Poke-Project v1">
@@ -33,17 +41,26 @@ import Search from '../components/Search.astro';
 				</linearGradient>
 			</defs>
 		</svg>
-		<h1>Welcome to 
+		<h1>
+			Welcome to
 			<br />
 			<span class="text-gradient">Poke Project</span>
 		</h1>
 		<p class="instructions">
-			enter the name of the pokemon you are looking for and wait for the matching results to be listed.
-      <br />
-      <br />
-      If you don't remember the name, just click the <code>See the whole list</code> button to see them all.
+			enter the name of the pokemon you are looking for and wait for the
+			matching results to be listed.
+			<br />
+			<br />
+			 If you don't remember the name, just click the <code
+				>See the whole list</code
+			> button to see them all.
 		</p>
 		<Search />
+		{
+			pokemons.map((p: Pokemon) => {
+				<PokeCard href={`/pokemon-detail/${p.id}`} title={p.name} img={p.sprites.frontDefault} types={p.types} />;
+			})
+		}
 		<button>See the whole list</button>
 	</main>
 </Layout>
@@ -84,7 +101,10 @@ import Search from '../components/Search.astro';
 	.instructions {
 		margin-bottom: 2rem;
 		border: 1px solid rgba(var(--accent-light), 25%);
-		background: linear-gradient(rgba(var(--accent-dark), 66%), rgba(var(--accent-dark), 33%));
+		background: linear-gradient(
+			rgba(var(--accent-dark), 66%),
+			rgba(var(--accent-dark), 33%)
+		);
 		padding: 1.5rem;
 		border-radius: 8px;
 	}

@@ -37,10 +37,10 @@ import Card from '../components/Card.astro';
 			<br />
 			<span class="text-gradient">Poke Project</span>
 		</h1>
-		<p class="instructions">
+		<!-- <p class="instructions">
 			To get started, open the directory <code>src/pages</code> in your project.<br />
 			<strong>Code Challenge:</strong> Tweak the "Welcome to Astro" message above.
-		</p>
+		</p> -->
 		<ul role="list" class="link-card-grid">
 			<Card
 				href="pokemon-search"
@@ -49,28 +49,18 @@ import Card from '../components/Card.astro';
 			/>
 			<Card
 				href="pokemon-compare"
-				title="Compare your Pokemon"
-				body="Tests your Pokemon against your rival and check your chances."
+				title="Compare Pokemon"
+				body="Check win rates between two Pokemons."
+			/>
+			<Card
+				href="pokemon-team-compare"
+				title="Compare your Team"
+				body="Tests your Pokemon team against your rival team."
 			/>
 			<Card
 				href="https://docs.astro.build/"
 				title="Documentation"
-				body="Learn how Astro works and explore the official API docs."
-			/>
-			<Card
-				href="https://astro.build/integrations/"
-				title="Integrations"
-				body="Supercharge your project with new frameworks and libraries."
-			/>
-			<Card
-				href="https://astro.build/themes/"
-				title="Themes"
-				body="Explore a galaxy of community-built starter themes."
-			/>
-			<Card
-				href="https://astro.build/chat/"
-				title="Community"
-				body="Come say hi to our amazing Discord community. ❤️"
+				body="Learn how the Poke-project works and explore the docs."
 			/>
 		</ul>
 	</main>
