@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Map;
 
+@CrossOrigin(origins = "http://localhost:3000", maxAge = 3600)
 @RestController
 @ResponseBody
 @RequestMapping("pokemon")
@@ -39,11 +40,11 @@ public class PokemonController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<PokemonExternalDTO> getPokemon(@PathVariable String id) {
+    public ResponseEntity<PokemonSmallDTO> getPokemon(@PathVariable String id) {
         logger.info("Received request for retrieving pokemon with identifier {}", id);
         Pokemon response = pokeApiService.getPokemon(id);
         logger.info("Retrieving pokemon with identifier {}", id);
-        return ResponseEntity.ok(modelMapper.map(response, PokemonExternalDTO.class));
+        return ResponseEntity.ok(modelMapper.map(response, PokemonSmallDTO.class));
     }
 
     @GetMapping("/damage")
