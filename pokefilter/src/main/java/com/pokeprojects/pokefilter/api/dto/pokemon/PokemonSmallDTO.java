@@ -22,7 +22,7 @@ public class PokemonSmallDTO {
     private String name;
     private Integer height;
     private Integer weight;
-    private PokemonSpritesDTO sprites;
+    private PokemonExternalSpriteDTO sprites;
     private List<PokemonStatExternalDTO> stats;
     private List<PokemonTypeExternalDTO> types;
 }

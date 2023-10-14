@@ -1,4 +1,5 @@
 import axios from 'axios';
+import {PokemonSmall} from '../interfaces/Pokemon/PokemonSmall'
 
 class PokemonService {
   baseUrl: string
@@ -15,9 +16,17 @@ class PokemonService {
       });
   }
 
-  getPokemon(id:number) {
+  getPokemon(id:number): Promise<PokemonSmall> {
     return axios.get(`${this.baseUrl}/${id}`)
-      .then((response) => console.log(response.data))
+      .then((response) => {return response.data})
+      .catch((error) => {
+        throw error;
+      });
+  }
+
+  getPokemonByRegion(region: string): Promise<PokemonSmall[]> {
+    return axios.get(`${this.baseUrl}/filter-params?region=${region.toUpperCase()}`)
+      .then((response) => {return response.data})
       .catch((error) => {
         throw error;
       });

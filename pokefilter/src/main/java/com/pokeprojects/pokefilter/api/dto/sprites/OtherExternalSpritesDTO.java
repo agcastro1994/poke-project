@@ -1,9 +1,9 @@
-package com.pokeprojects.pokefilter.api.dto.pokemon;
+package com.pokeprojects.pokefilter.api.dto.sprites;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
-import com.pokeprojects.pokefilter.api.dto.StatExternalDTO;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,8 +14,8 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class PokemonStatExternalDTO {
-    private StatExternalDTO stat;
-    private Integer effort;
-    private Integer baseStat;
+public class OtherExternalSpritesDTO {
+    private AdditionalArtworkExternalDTO officialArtwork;
+    private AdditionalArtworkExternalDTO home;
+    private AdditionalArtworkExternalDTO dreamWorld;
 }

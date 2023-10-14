@@ -1,12 +1,12 @@
-package com.pokeprojects.pokefilter.api.dto.sprites;
+package com.pokeprojects.pokefilter.api.dto.pokemon;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.databind.PropertyNamingStrategies;
-import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import com.pokeprojects.pokefilter.api.dto.sprites.OtherExternalSpritesDTO;
+import com.pokeprojects.pokefilter.api.dto.sprites.OtherSpritesDTO;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Setter;
 
 @AllArgsConstructor
@@ -15,8 +15,7 @@ import lombok.Setter;
 @Setter
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-public class PokemonSpritesDTO {
+public class PokemonExternalSpriteDTO {
     private String frontDefault;
     private String frontShiny;
     private String frontFemale;
@@ -25,5 +24,5 @@ public class PokemonSpritesDTO {
     private String backShiny;
     private String backFemale;
     private String backShinyFemale;
-    private OtherSpritesDTO other;
+    private OtherExternalSpritesDTO other;
 }

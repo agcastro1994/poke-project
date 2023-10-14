@@ -130,7 +130,9 @@ public class PokeApiService {
 
         //Remove possible duplicates
         Set<Pokemon> set = new HashSet<>(filteredList);
-        return new ArrayList<>(set);
+        List<Pokemon> finalList = new ArrayList<>(set);
+        finalList.sort(Comparator.comparing(Pokemon::getId));
+        return finalList;
     }
 
     private PokemonFilters findFilterByName(String paramName) {
