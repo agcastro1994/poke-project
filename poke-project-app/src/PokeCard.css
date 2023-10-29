@@ -3,8 +3,8 @@
     max-width: 100%;
     height: auto;
     margin-bottom: 10px;
-    width: 8.75em;
-    height: 8.75em;
+    width: 7.75em;
+    height: 7.75em;
   }
 
   .pokemon-minisprite{
@@ -21,7 +21,7 @@
   }
   
   .pokemon-info h2 {
-    font-size: 1.5rem;
+    font-size: 1.75rem;
     margin: 0;
   }
   
@@ -88,19 +88,19 @@
     left: 50%;
     background: #0af;
     width: 500px;
-    height: 450px;
+    height: 455px;
     margin-left: -250px;
     margin-top: -250px;
     transform-origin: 50% 48%;
     border-radius: 43%;
-    animation: drift 5000ms infinite linear;
+    animation: drift 6000ms infinite linear;
     z-index: -1;
   }
   
   .wave.-three {
-    animation: drift 7000ms infinite linear;
+    animation: drift 7500ms infinite linear;
     opacity: 0.7;
-    height: 350px;
+    height: 385px;
   }
   
   .wave.-two {
@@ -129,14 +129,30 @@
   .top-icon{
     position: absolute;
     right: 0%;
-    bottom: 0%;
-    width: 2.25em;
-    height: 2.25em;
+    top: 70%;
+    width: 2em;
+    height: 2em;
   }
 
   .top-icon img{
     width: 75%;
     height: 75%;
+  }
+
+  .type-container {
+    margin-top: 1%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .type-pill {
+    font-size: 1rem;
+    background: #fff; /* Use the appropriate color property here */
+    color: #fff; /* Text color, e.g., white */
+    border-radius: 20px; /* Adjust the value to control the pill shape */
+    padding: 5px 12px; /* Adjust the padding for the size of the pill */
+    margin: 4px; /* Adjust the margin to control the spacing between pills */
   }
 
   

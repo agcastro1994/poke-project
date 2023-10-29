@@ -48,3 +48,31 @@ label{
     transform: rotate(360deg);
   }
 }
+
+.search-bar {
+  display: flex;
+  border: 2px solid #333;
+  border-radius: 25px;
+  padding: 5px;
+}
+
+.search-bar input {
+  flex: 1;
+  border: none;
+  outline: none;
+  padding: 10px;
+  border-radius: 20px;
+}
+
+.search-button {
+  background-color: #333;
+  color: white;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  padding: 5px 10px;
+}
+
+.search-button:hover {
+  background-color: #555;
+}
