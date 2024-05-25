@@ -1,0 +1,14 @@
+
+-Xmx4g
+-Xms2g
+
+
+-XX:+UseG1GC
+
+
+-XX:MaxMetaspaceSize=256m
+-XX:MaxMetaspaceSize=256m
+-XX:+UseStringDeduplication
+
+
+-Djava.security.egd=file:/dev/./urandom

@@ -4,10 +4,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class PokefilterApplication {
+public class PokeFilterApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(PokefilterApplication.class, args);
+		SpringApplication.run(PokeFilterApplication.class, args);
 	}
 
 }
