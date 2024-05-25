@@ -37,12 +37,30 @@ RUN mvn package spring-boot:repackage
 # 3. Copiar de la imagen de *build* los archivos necesarios para ejecutar correctamente la aplicacion
 FROM amazoncorretto:21-alpine-jdk AS final
 
+# Instalar jemalloc
+RUN apk add --no-cache jemalloc
+
+# Verificar si TZdata está actualizado
+RUN apk --no-cache upgrade && \
+    apk --no-cache add tzdata && \
+    rm -rf /var/cache/apk/* && \
+    CURRENT_TZDATA=$(date +%Z) && \
+    LATEST_TZDATA=$(apk search tzdata | grep "^tzdata" | cut -d"-" -f2) && \
+    if [ "$CURRENT_TZDATA" != "$LATEST_TZDATA" ]; then \
+        echo "Warning: TZdata is not up-to-date."; \
+        echo "Installed TZdata version: $CURRENT_TZDATA"; \
+        echo "Latest TZdata version: $LATEST_TZDATA"; \
+    else \
+        echo "TZdata is up-to-date."; \
+        echo "Installed TZdata version: $CURRENT_TZDATA"; \
+    fi
 
 EXPOSE 8081
 
 # En este caso, copiamos de la imagen descartable el jar generado
 # HELP: COPY <archivo_de_directorio_de_build> <destino_dentro_de_la_imagen_*final*>
 COPY --from=build /app/target/pokefilter-0.0.1-SNAPSHOT.jar app.jar
-
-
-CMD ["java","-jar","app.jar" ]
+COPY ./scripts/startup ./startup
+COPY ./conf/jvm-args ./jvm-args
+RUN ["chmod", "+x", "./startup"]
+CMD ./startup

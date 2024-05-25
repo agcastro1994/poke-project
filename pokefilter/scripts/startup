@@ -1,0 +1,11 @@
+#!/bin/sh
+
+# Configurar jemalloc
+export LD_PRELOAD="/usr/lib/libjemalloc.so.2"
+
+# Leer los JVM args desde el archivo
+JVM_ARGS_FILE="./jvm-args"
+JVM_ARGS=$(cat "$JVM_ARGS_FILE")
+
+# Ejecutar la aplicación Java
+exec java $JVM_ARGS -jar app.jar
