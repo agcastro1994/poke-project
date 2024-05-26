@@ -19,7 +19,7 @@ public class PokemonInMemoryRepository  implements Indexes<Pokemon,Integer> {
     }
 
     public List<Pokemon> getAllPokemon(){
-        return CollectionUtils.isEmpty(pokemonConcurrentMap) ? pokemonConcurrentMap.values().stream().toList() : new ArrayList<>();
+        return !CollectionUtils.isEmpty(pokemonConcurrentMap) ? pokemonConcurrentMap.values().stream().toList() : new ArrayList<>();
     }
 
     @Override
