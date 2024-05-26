@@ -7,12 +7,12 @@ import com.pokeprojects.pokefilter.api.dto.type.TypeDTO;
 import com.pokeprojects.pokefilter.api.enums.MatchStrategy;
 import com.pokeprojects.pokefilter.api.enums.PokemonFilters;
 import com.pokeprojects.pokefilter.api.enums.Region;
-import com.pokeprojects.pokefilter.api.indexes.PokemonIndex;
 import com.pokeprojects.pokefilter.api.model.move.Move;
 import com.pokeprojects.pokefilter.api.model.pokemon.Pokemon;
 import com.pokeprojects.pokefilter.api.model.records.PokemonSpecy;
 import com.pokeprojects.pokefilter.api.model.type.Type;
 import com.pokeprojects.pokefilter.api.repository.pokemon.PokemonInMemoryRepository;
+import com.pokeprojects.pokefilter.api.repository.pokemon.indexes.Indexes;
 import com.pokeprojects.pokefilter.api.services.FilterService;
 import com.pokeprojects.pokefilter.api.services.graphql.EvolutionService;
 import com.pokeprojects.pokefilter.api.services.pokemon_species.PokemonSpeciesService;
@@ -28,20 +28,19 @@ import java.util.stream.Collectors;
 
 @Service
 public class PokeApiService {
-    private PokeReactiveClient reactiveClient;
-    private ModelMapper mapper;
-    private FilterService filterService;
-    private PokemonInMemoryRepository inMemoryRepository;
+    private final PokeReactiveClient reactiveClient;
+    private final ModelMapper mapper;
+    private final FilterService filterService;
+    private final PokemonInMemoryRepository inMemoryRepository;
     private PokemonSpeciesService speciesService;
-    private EvolutionService evolutionService;
-    private PokemonIndex typeIndex;
-    private PokemonIndex regionIndex;
-    private Logger logger = LoggerFactory.getLogger(PokeApiService.class);
+    private final EvolutionService evolutionService;
+    private Indexes<Pokemon, String> typeIndex;
+    private Indexes<Pokemon, String> regionIndex;
+    private final Logger logger = LoggerFactory.getLogger(PokeApiService.class);
     private volatile boolean isLoading = false;
-    private final int KNOWN_POKEMON_QUANTITY = 1010;
 
 
-    public PokeApiService(PokeReactiveClient reactiveClient, ModelMapper mapper, FilterService filterService, PokemonInMemoryRepository inMemoryRepository, PokemonSpeciesService speciesService, @Qualifier("pokemonTypeIndex") PokemonIndex typeIndex, @Qualifier("pokemonRegionIndex") PokemonIndex regionIndex, EvolutionService evolutionService) {
+    public PokeApiService(PokeReactiveClient reactiveClient, ModelMapper mapper, FilterService filterService, PokemonInMemoryRepository inMemoryRepository, PokemonSpeciesService speciesService, @Qualifier("pokemonTypeIndex") Indexes<Pokemon, String> typeIndex, @Qualifier("pokemonRegionIndex") Indexes<Pokemon, String> regionIndex, EvolutionService evolutionService) {
         this.reactiveClient = reactiveClient;
         this.mapper = mapper;
         this.filterService = filterService;
@@ -52,7 +51,7 @@ public class PokeApiService {
         this.evolutionService = evolutionService;
     }
 
-    private PokemonIndex getIndexForFilter(PokemonFilters filter) {
+    private Indexes<Pokemon, String> getIndexForFilter(PokemonFilters filter) {
         return switch (filter) {
             case TYPE -> typeIndex;
             case REGION -> regionIndex;
@@ -117,9 +116,12 @@ public class PokeApiService {
 
             if (!paramValue.equals(filter.getDefaultValue())) {
                 if (filter.isIndexed() && !isLoading) {
-                    List<Pokemon> indexList = getIndexForFilter(filter).getListByIndex(paramValue);
-                    // Intersect the indexList with the filteredResults using retainAll
-                    filteredResults.retainAll(indexList);
+                    Indexes<Pokemon, String> index = getIndexForFilter(filter);
+                    if(index != null) {
+                        List<Pokemon> indexList = index.getListByIndex(paramValue);
+                        // Intersect the indexList with the filteredResults using retainAll
+                        filteredResults.retainAll(indexList);
+                    }
                 } else {
                     Predicate<Pokemon> filterPredicate = filter.getFilterCondition(paramValue);
                     criteria.add(filterPredicate);
@@ -150,7 +152,7 @@ public class PokeApiService {
      *  Then checks is the region is already loaded, if not, search for it using the API.
      *  If there is no region filter we search in the API for the missing regions to complete the whole Pokemon list
      * @param criteriaMap Map with the filters received
-     * @return
+     * @return The list of Pokemon to start the search
      */
     private List<Pokemon> getBaseListToFilter(Map<String,String> criteriaMap){
         String regionFilterName = PokemonFilters.REGION.getFilterName();
@@ -204,17 +206,17 @@ public class PokeApiService {
                 .map(PokemonSpecy::evolves_from_species_id)
                 .collect(Collectors.toSet());
         return species.stream()
-                .filter(specy -> !evolvesFromSet.contains(specy.id()))
+                .filter(sp -> !evolvesFromSet.contains(sp.id()))
                 .toList();
     }
 
     public void loadPokemonInMemory(List<Pokemon> pokemonList){
-        inMemoryRepository.addPokemonList(pokemonList);
+        inMemoryRepository.loadIndex(pokemonList);
     }
 
     public Pokemon getPokemonByIdOrName(String identifier){
         PokemonClientDTO pokemonDTO = reactiveClient.getPokemon(identifier).block();
-        logger.info("Mapping to model the pokemon with id {}", pokemonDTO.getId());
+        logger.info("Mapping to model the pokemon with id {}", identifier);
         return this.mapper.map(pokemonDTO, Pokemon.class);
     }
 

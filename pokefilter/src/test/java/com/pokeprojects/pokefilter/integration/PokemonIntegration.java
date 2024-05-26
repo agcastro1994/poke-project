@@ -97,7 +97,7 @@ public class PokemonIntegration {
     @Test
     public void getAllPokemonTest() throws Exception {
         //Storing all my Pokemon in memory
-        inMemoryRepository.addPokemonList(pokemonList);
+        inMemoryRepository.loadIndex(pokemonList);
 
         this.mockMvc.perform(MockMvcRequestBuilders.get("/pokemon/all"))
                 .andDo(print())

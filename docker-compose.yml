@@ -1,15 +1,16 @@
-version: '3'
 services:
 
   pokefilter-backend:
-    image: "pokefilter:0.0.1"
+    build:
+      context: ./pokefilter/
     container_name: poke-filter
     ports:
       - "8081:8081"
     environment:
       - SPRING.PROFILES.ACTIVE=default
   poke-react-app:
-    image: "poke-react-app:0.0.1"
+    build:
+      context: ./poke-project-app/
     container_name: poke-react-app
     ports:
       - "3000:80"
