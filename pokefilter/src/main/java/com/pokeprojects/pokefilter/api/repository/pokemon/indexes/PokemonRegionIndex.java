@@ -1,4 +1,4 @@
-package com.pokeprojects.pokefilter.api.indexes;
+package com.pokeprojects.pokefilter.api.repository.pokemon.indexes;
 
 import com.pokeprojects.pokefilter.api.enums.Region;
 import com.pokeprojects.pokefilter.api.model.pokemon.Pokemon;
@@ -12,7 +12,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 @Component
-public class PokemonRegionIndex implements PokemonIndex {
+public class PokemonRegionIndex implements Indexes<Pokemon,String> {
     private ConcurrentMap<String, List<Pokemon>> regionIndex;
     private final int REGIONS_QUANTITY = 9;
 
