@@ -32,23 +32,20 @@ public class PokeApiService {
     private final ModelMapper mapper;
     private final FilterService filterService;
     private final PokemonInMemoryRepository inMemoryRepository;
-    private PokemonSpeciesService speciesService;
-    private final EvolutionService evolutionService;
+
     private Indexes<Pokemon, String> typeIndex;
     private Indexes<Pokemon, String> regionIndex;
     private final Logger logger = LoggerFactory.getLogger(PokeApiService.class);
     private volatile boolean isLoading = false;
 
 
-    public PokeApiService(PokeReactiveClient reactiveClient, ModelMapper mapper, FilterService filterService, PokemonInMemoryRepository inMemoryRepository, PokemonSpeciesService speciesService, @Qualifier("pokemonTypeIndex") Indexes<Pokemon, String> typeIndex, @Qualifier("pokemonRegionIndex") Indexes<Pokemon, String> regionIndex, EvolutionService evolutionService) {
+    public PokeApiService(PokeReactiveClient reactiveClient, ModelMapper mapper, FilterService filterService, PokemonInMemoryRepository inMemoryRepository, @Qualifier("pokemonTypeIndex") Indexes<Pokemon, String> typeIndex, @Qualifier("pokemonRegionIndex") Indexes<Pokemon, String> regionIndex) {
         this.reactiveClient = reactiveClient;
         this.mapper = mapper;
         this.filterService = filterService;
         this.inMemoryRepository = inMemoryRepository;
-        this.speciesService = speciesService;
         this.typeIndex = typeIndex;
         this.regionIndex = regionIndex;
-        this.evolutionService = evolutionService;
     }
 
     private Indexes<Pokemon, String> getIndexForFilter(PokemonFilters filter) {
@@ -181,51 +178,11 @@ public class PokeApiService {
         return mergedList;
     }
 
-    public void loadStartupData() {
-        isLoading = true;
-        List<PokemonSpecy> species  = evolutionService.getSpecies();
-        List<PokemonSpecy> evolvedSpecies  = evolutionService.getSpeciesEvolutionData();
-        List<PokemonSpecy> lastEvolutions =  fullyEvolvedSpecies(evolvedSpecies);
-        for(Region region : Region.getAllRegions()){
-            List<Pokemon> regionPokemon = reactiveClient.getAllPokemonByRegion(region).stream().map(poke -> mapper.map(poke, Pokemon.class)).toList();
-
-            regionPokemon.forEach(poke -> {
-                PokemonSpecy spe = species.stream().filter(sp -> Objects.equals(sp.id(), poke.getId())).findFirst().get();
-                poke.setSpecies(spe);
-                poke.setIsFullyEvolved(lastEvolutions.stream().anyMatch(spec-> Objects.equals(spec.id(), poke.getId())) || poke.getSpecies().is_legendary() || poke.getSpecies().is_mythical());
-            });
-            loadPokemonInMemory(regionPokemon);
-            typeIndex.loadIndex(regionPokemon);
-            regionIndex.loadIndex(regionPokemon);
-        }
-        isLoading = false;
-    }
-
-    private List<PokemonSpecy> fullyEvolvedSpecies(List<PokemonSpecy> species){
-        Set<Integer> evolvesFromSet = species.stream()
-                .map(PokemonSpecy::evolves_from_species_id)
-                .collect(Collectors.toSet());
-        return species.stream()
-                .filter(sp -> !evolvesFromSet.contains(sp.id()))
-                .toList();
-    }
-
-    public void loadPokemonInMemory(List<Pokemon> pokemonList){
-        inMemoryRepository.loadIndex(pokemonList);
-    }
-
     public Pokemon getPokemonByIdOrName(String identifier){
         PokemonClientDTO pokemonDTO = reactiveClient.getPokemon(identifier).block();
         logger.info("Mapping to model the pokemon with id {}", identifier);
         return this.mapper.map(pokemonDTO, Pokemon.class);
     }
 
-
-    //Possibly deprecated
-    public List<Type> getPokemonTypesInfo(String identifier){
-        return reactiveClient.getPokemonTypesInfo(identifier)
-                .map(type -> mapper.map(type, Type.class))
-                .collect(Collectors.toList()).block();
-    }
 
 }
