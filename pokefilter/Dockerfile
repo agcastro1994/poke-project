@@ -3,10 +3,11 @@
 # 2. Compilar
 # 3. Testear
 # 4. Buildear el jar
-FROM maven:3.9.5-amazoncorretto-17 AS build
+FROM maven:3.9.5-amazoncorretto-21 AS build
 
 
-# Copiamos el pom para exclusivamente descargar las dependencias y que pueda guardase este layer en la cache. [cache-layers]: https://docs.docker.com/develop/develop-images/dockerfile_best-practices/#leverage-build-cache
+# Copiamos el pom para exclusivamente descargar las dependencias y que pueda guardase este layer en la cache. 
+# [cache-layers]: https://docs.docker.com/develop/develop-images/dockerfile_best-practices/#leverage-build-cache
 # HELP: COPY <archivo_de_nuestro_directorio> <destino_dentro_de_la_imagen_*build*>
 COPY ./pom.xml /app/pom.xml
 
@@ -28,14 +29,7 @@ RUN mvn install -Dmaven.test.skip=true dependency:resolve dependency:resolve-plu
 # HELP: RUN <comandos a ejecutar>
 RUN mvn package spring-boot:repackage
 
-
-#Esta imagen es la que se va a deployar en nebula. Los objetivos son:
-# 1. Imagen de base liviana.
-#    Mientras mas liviana, mas rapida sera la descarga de la imagen para deployar y la subida al repositorio.
-#    Imágenes recomendadas: openjdk:<java-version>-jre-alpine, o alguna de las provistas por Nebula.
-# 2. Instalar herramientas para troubleshooting.
-# 3. Copiar de la imagen de *build* los archivos necesarios para ejecutar correctamente la aplicacion
-FROM amazoncorretto:17-alpine-jdk AS final
+FROM amazoncorretto:21-alpine-jdk AS final
 
 
 EXPOSE 8081
