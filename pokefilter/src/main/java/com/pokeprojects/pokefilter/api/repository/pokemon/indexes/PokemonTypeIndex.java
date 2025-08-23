@@ -56,4 +56,9 @@ public class PokemonTypeIndex implements Indexes<Pokemon,String> {
     public Set<String> getKeySet(){
         return typeIndex.keySet();
     }
+
+    @Override
+    public void clearIndex() {
+        typeIndex.clear();
+    }
 }

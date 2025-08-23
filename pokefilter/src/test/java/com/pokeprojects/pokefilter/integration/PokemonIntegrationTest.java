@@ -1,14 +1,11 @@
 package com.pokeprojects.pokefilter.integration;
 
-import com.github.tomakehurst.wiremock.WireMockServer;
-import com.github.tomakehurst.wiremock.extension.responsetemplating.ResponseTemplateTransformer;
+
 import com.github.tomakehurst.wiremock.junit5.WireMockTest;
 import com.pokeprojects.pokefilter.api.model.pokemon.*;
 import com.pokeprojects.pokefilter.api.model.sprites.PokemonSprites;
 import com.pokeprojects.pokefilter.api.repository.pokemon.PokemonInMemoryRepository;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -26,22 +23,22 @@ import java.util.List;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
-import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.options;
 import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.Mockito.mock;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
-@SpringBootTest
+
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @AutoConfigureMockMvc
 @ExtendWith(SpringExtension.class)
 @ActiveProfiles(value = "test")
-@WireMockTest
-public class PokemonIntegration {
+@WireMockTest(httpPort = 8090)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+public class PokemonIntegrationTest {
+
     @Autowired
     private MockMvc mockMvc;
-    private WireMockServer wireMockServer;
     @Autowired
     private PokemonInMemoryRepository inMemoryRepository;
     private List<Pokemon> pokemonList;
@@ -61,19 +58,43 @@ public class PokemonIntegration {
         Pokemon pokemon5 = new Pokemon(157,"typhlosion", 240, 17, true, 254, 795, List.of(ability), List.of(move), sprites, List.of(stat), List.of(type),null,true);
 
         pokemonList = List.of(pokemon1,pokemon2,pokemon3,pokemon4,pokemon5);
-
-        wireMockServer = new WireMockServer(
-                options().extensions(new ResponseTemplateTransformer(false))
-                        .port(8090));
-        configureFor("localhost", 8090);
-        wireMockServer.start();
+        inMemoryRepository.clearIndex();
     }
+
+    @AfterEach
+    void teardown() { inMemoryRepository.clearIndex(); }
 
     @Test
     public void getPokemonTest() throws Exception {
         String pokemonResponse = FileUtils.readFileToString(new File("src/test/java/resources/charizard.json"), StandardCharsets.UTF_8);
 
-        wireMockServer.stubFor(get(urlPathMatching("/pokemon/6"))
+        stubFor(get(urlPathMatching("/pokemon/6"))
+                .willReturn(aResponse()
+                        .withHeader("Content-Type", "application/json")
+                        .withBody(pokemonResponse)
+                        .withTransformers("response-template")));
+
+        this.mockMvc.perform(MockMvcRequestBuilders.get("/pokemon/{id}",6))
+                .andDo(print())
+                .andExpect(jsonPath("$.id").value(6))
+                .andExpect(jsonPath("$.name").value("charizard"))
+                .andExpect(jsonPath("$.types[1].type.name").value("flying"))
+                .andExpect(jsonPath("$.types", hasSize(2)))
+                .andExpect(jsonPath("$.height").value(17))
+                .andExpect(jsonPath("$.weight").value(905))
+                .andExpect(jsonPath("$.stats", hasSize(6)))
+                .andExpect(jsonPath("$.stats[0].stat.name").value("hp"))
+                .andExpect(jsonPath("$.stats[0].baseStat").value(78))
+                .andExpect(jsonPath("$.types[0].type.name").value("fire"))
+                .andExpect(jsonPath("$.types[1].type.name").value("flying"));
+    }
+
+    @Disabled("Current response is PokemonSmallDTO")
+    @Test
+    public void getFullPokemonTest() throws Exception {
+        String pokemonResponse = FileUtils.readFileToString(new File("src/test/java/resources/charizard.json"), StandardCharsets.UTF_8);
+
+        stubFor(get(urlPathMatching("/pokemon/6"))
                 .willReturn(aResponse()
                         .withHeader("Content-Type", "application/json")
                         .withBody(pokemonResponse)

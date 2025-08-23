@@ -18,4 +18,6 @@ public interface Indexes<T,V> {
 
     Set<V> getKeySet();
 
+    void clearIndex();
+
 }

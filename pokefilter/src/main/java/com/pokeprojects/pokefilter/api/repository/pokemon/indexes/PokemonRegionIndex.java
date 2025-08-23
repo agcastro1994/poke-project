@@ -53,4 +53,9 @@ public class PokemonRegionIndex implements Indexes<Pokemon,String> {
     public Set<String> getKeySet(){
         return regionIndex.keySet();
     }
+
+    @Override
+    public void clearIndex() {
+        regionIndex.clear();
+    }
 }

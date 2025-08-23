@@ -12,6 +12,7 @@ import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,6 +20,7 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+@Profile("!test")
 @Service
 public class LoadDataService {
     private final EvolutionService evolutionService;
@@ -39,6 +41,7 @@ public class LoadDataService {
         this.inMemoryRepository = inMemoryRepository;
 
     }
+
     @PostConstruct
     public void loadStartupData() {
         isLoading = true;

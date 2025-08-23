@@ -9,22 +9,21 @@ import com.pokeprojects.pokefilter.api.enums.PokemonFilters;
 import com.pokeprojects.pokefilter.api.enums.Region;
 import com.pokeprojects.pokefilter.api.model.move.Move;
 import com.pokeprojects.pokefilter.api.model.pokemon.Pokemon;
-import com.pokeprojects.pokefilter.api.model.records.PokemonSpecy;
+
 import com.pokeprojects.pokefilter.api.model.type.Type;
 import com.pokeprojects.pokefilter.api.repository.pokemon.PokemonInMemoryRepository;
 import com.pokeprojects.pokefilter.api.repository.pokemon.indexes.Indexes;
 import com.pokeprojects.pokefilter.api.services.FilterService;
-import com.pokeprojects.pokefilter.api.services.graphql.EvolutionService;
-import com.pokeprojects.pokefilter.api.services.pokemon_species.PokemonSpeciesService;
+
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 @Service
 public class PokeApiService {
@@ -33,27 +32,22 @@ public class PokeApiService {
     private final FilterService filterService;
     private final PokemonInMemoryRepository inMemoryRepository;
 
+    private final Map<PokemonFilters, Indexes> indexStrategy;
+
     private Indexes<Pokemon, String> typeIndex;
     private Indexes<Pokemon, String> regionIndex;
     private final Logger logger = LoggerFactory.getLogger(PokeApiService.class);
     private volatile boolean isLoading = false;
 
 
-    public PokeApiService(PokeReactiveClient reactiveClient, ModelMapper mapper, FilterService filterService, PokemonInMemoryRepository inMemoryRepository, @Qualifier("pokemonTypeIndex") Indexes<Pokemon, String> typeIndex, @Qualifier("pokemonRegionIndex") Indexes<Pokemon, String> regionIndex) {
+    public PokeApiService(PokeReactiveClient reactiveClient, ModelMapper mapper, FilterService filterService, PokemonInMemoryRepository inMemoryRepository, @Qualifier("pokeApiIndexStrategy") Map<PokemonFilters, Indexes> indexStrategy, @Lazy @Qualifier("pokemonTypeIndex") Indexes<Pokemon, String> typeIndex, @Lazy @Qualifier("pokemonRegionIndex") Indexes<Pokemon, String> regionIndex) {
         this.reactiveClient = reactiveClient;
         this.mapper = mapper;
         this.filterService = filterService;
         this.inMemoryRepository = inMemoryRepository;
+        this.indexStrategy = indexStrategy;
         this.typeIndex = typeIndex;
         this.regionIndex = regionIndex;
-    }
-
-    private Indexes<Pokemon, String> getIndexForFilter(PokemonFilters filter) {
-        return switch (filter) {
-            case TYPE -> typeIndex;
-            case REGION -> regionIndex;
-            default        -> null;
-        };
     }
 
     public Pokemon getPokemon(String identifier){
@@ -113,7 +107,7 @@ public class PokeApiService {
 
             if (!paramValue.equals(filter.getDefaultValue())) {
                 if (filter.isIndexed() && !isLoading) {
-                    Indexes<Pokemon, String> index = getIndexForFilter(filter);
+                    Indexes<Pokemon, String> index = indexStrategy.get(filter);
                     if(index != null) {
                         List<Pokemon> indexList = index.getListByIndex(paramValue);
                         // Intersect the indexList with the filteredResults using retainAll

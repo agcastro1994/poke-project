@@ -28,13 +28,6 @@ RUN mvn install -Dmaven.test.skip=true dependency:resolve dependency:resolve-plu
 # HELP: RUN <comandos a ejecutar>
 RUN mvn package spring-boot:repackage
 
-
-#Esta imagen es la que se va a deployar. Los objetivos son:
-# 1. Imagen de base liviana.
-#    Mientras mas liviana, mas rapida sera la descarga de la imagen para deployar y la subida al repositorio.
-#    Imágenes recomendadas: openjdk:<java-version>-jre-alpine, o alguna de las provistas por Nebula.
-# 2. Instalar herramientas para troubleshooting.
-# 3. Copiar de la imagen de *build* los archivos necesarios para ejecutar correctamente la aplicacion
 FROM amazoncorretto:21-alpine-jdk AS final
 
 # Instalar jemalloc

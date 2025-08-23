@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, {AxiosResponse} from 'axios';
 import {PokemonSmall} from '../interfaces/Pokemon/PokemonSmall'
 
 class PokemonService {
@@ -8,21 +8,18 @@ class PokemonService {
     this.baseUrl = 'http://localhost:8081/pokemon'; // Update with your API endpoint
   }
 
-  getAllPokemon() {
-    return axios.get(`${this.baseUrl}/all`)
-      .then((response) => response.data)
-      .catch((error) => {
-        throw error;
-      });
-  }
+    //Not working properly at the moment
+    async getAllPokemon<T>(): Promise<T> {
+        const response = await axios.get<T>(`${this.baseUrl}/all`);
+        return response.data;
+    }
 
-  getPokemon(id:number): Promise<PokemonSmall> {
-    return axios.get(`${this.baseUrl}/${id}`)
-      .then((response) => {return response.data})
-      .catch((error) => {
-        throw error;
-      });
-  }
+
+
+    async getPokemon<T>(id: number): Promise<T> {
+        const response = await axios.get<T>(`${this.baseUrl}/${id}`);
+        return response.data;
+    }
 
   getPokemonByRegion(region: string): Promise<PokemonSmall[]> {
     return axios.get(`${this.baseUrl}/filter-params?region=${region.toUpperCase()}`)

@@ -52,4 +52,9 @@ public class PokemonInMemoryRepository  implements Indexes<Pokemon,Integer> {
     public Set<Integer> getKeySet() {
         return pokemonConcurrentMap.keySet();
     }
+
+    @Override
+    public void clearIndex() {
+        pokemonConcurrentMap.clear();
+    }
 }
