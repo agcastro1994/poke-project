@@ -6,7 +6,7 @@
 FROM maven:3.9.5-amazoncorretto-21 AS build
 
 
-# Copiamos el pom para exclusivamente descargar las dependencias y que pueda guardase este layer en la cache. 
+# Copiamos el pom para exclusivamente descargar las dependencias y que pueda guardase este layer en la cache.
 # [cache-layers]: https://docs.docker.com/develop/develop-images/dockerfile_best-practices/#leverage-build-cache
 # HELP: COPY <archivo_de_nuestro_directorio> <destino_dentro_de_la_imagen_*build*>
 COPY ./pom.xml /app/pom.xml
@@ -31,12 +31,30 @@ RUN mvn package spring-boot:repackage
 
 FROM amazoncorretto:21-alpine-jdk AS final
 
+# Instalar jemalloc
+RUN apk add --no-cache jemalloc
+
+# Verificar si TZdata está actualizado
+RUN apk --no-cache upgrade && \
+    apk --no-cache add tzdata && \
+    rm -rf /var/cache/apk/* && \
+    CURRENT_TZDATA=$(date +%Z) && \
+    LATEST_TZDATA=$(apk search tzdata | grep "^tzdata" | cut -d"-" -f2) && \
+    if [ "$CURRENT_TZDATA" != "$LATEST_TZDATA" ]; then \
+        echo "Warning: TZdata is not up-to-date."; \
+        echo "Installed TZdata version: $CURRENT_TZDATA"; \
+        echo "Latest TZdata version: $LATEST_TZDATA"; \
+    else \
+        echo "TZdata is up-to-date."; \
+        echo "Installed TZdata version: $CURRENT_TZDATA"; \
+    fi
 
 EXPOSE 8081
 
 # En este caso, copiamos de la imagen descartable el jar generado
 # HELP: COPY <archivo_de_directorio_de_build> <destino_dentro_de_la_imagen_*final*>
 COPY --from=build /app/target/pokefilter-0.0.1-SNAPSHOT.jar app.jar
-
-
-CMD ["java","-jar","app.jar" ]
+COPY ./scripts/startup ./startup
+COPY ./conf/jvm-args ./jvm-args
+RUN ["chmod", "+x", "./startup"]
+CMD ./startup

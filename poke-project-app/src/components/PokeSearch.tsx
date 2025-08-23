@@ -8,20 +8,23 @@ import SearchBar from './SearchBar';
 
 function PokeSearch() { 
 
-    const getPokemon = () => {
-        if(!isNaN(Number(search))){
-            PokemonFilterService.getPokemon(Number(search)).then(poke => {
-                const pokeList: PokemonSmall[] = [poke]
-                setPokemon(pokeList)
-            })
+    const getPokemon = async () => {
+        //Not working at the moment
+        // if(search === "ALL"){
+        //     const pokemonList = await PokemonFilterService.getAllPokemon<PokemonSmall[]>()
+        //     setPokemon(pokemonList)
+        // }
 
-        }
-        else{
+        if (!isNaN(Number(search))) {
+            const pokemon = await PokemonFilterService.getPokemon<PokemonSmall>(Number(search))
+            setPokemon([pokemon])
+
+        } else {
             PokemonFilterService.getPokemonByRegion(search).then(pokeList => {
                 setPokemon(pokeList)
             })
         }
-        
+
     }
 
     const [search, setSearch] = useState<string>("")

@@ -1,4 +1,4 @@
-package com.pokeprojects.pokefilter.api.indexes;
+package com.pokeprojects.pokefilter.api.repository.pokemon.indexes;
 
 import com.pokeprojects.pokefilter.api.model.pokemon.Pokemon;
 import com.pokeprojects.pokefilter.api.model.pokemon.PokemonType;
@@ -12,7 +12,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 @Component
-public class PokemonTypeIndex implements PokemonIndex {
+public class PokemonTypeIndex implements Indexes<Pokemon,String> {
     private ConcurrentMap<String, List<Pokemon>> typeIndex;
 
     private final int TYPES_QUANTITY = 18;
@@ -55,5 +55,10 @@ public class PokemonTypeIndex implements PokemonIndex {
     @Override
     public Set<String> getKeySet(){
         return typeIndex.keySet();
+    }
+
+    @Override
+    public void clearIndex() {
+        typeIndex.clear();
     }
 }

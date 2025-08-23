@@ -9,7 +9,7 @@ import java.util.List;
 
 @Service
 public class EvolutionService {
-    private GraphqlClient client;
+    private final GraphqlClient client;
 
     public EvolutionService(GraphqlClient client){
         this.client = client;
@@ -26,8 +26,8 @@ public class EvolutionService {
                         is_legendary
                         is_mythical
                         is_baby
-                    }                        
-                }   
+                    }
+                }
                 """;
 
         Mono<List<PokemonSpecy>> species = client.getResourceList(document, PokemonSpecy.class, "species");
@@ -44,8 +44,7 @@ public class EvolutionService {
                         is_legendary
                         is_mythical
                     }
-                        
-                }   
+                }
                 """;
 
         Mono<List<PokemonSpecy>> species = client.getResourceList(document, PokemonSpecy.class, "species");
